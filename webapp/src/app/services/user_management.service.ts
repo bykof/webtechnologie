@@ -56,4 +56,18 @@ export class UserManagementService {
       this.handleError
     );
   }
+  
+  register(email: String, password: String): Observable<User> {
+    return this.http.post(
+      this.auth_url + '/register',
+      {
+        email: email,
+        password: password,
+      }
+    ).map(
+      this.extractData
+    ).catch(
+      this.handleError
+    );
+  }
 }

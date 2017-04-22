@@ -3,7 +3,7 @@ import {Component} from '@angular/core';
 @Component({
   selector: 'navbar',
   template: `
-    <nav class="navbar navbar-toggleable-md fixed-top">
+    <nav class="navbar navbar-toggleable-md fixed-top navbar-light bg-faded">
       <button
         class="navbar-toggler navbar-toggler-right"
         type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
@@ -22,7 +22,10 @@ import {Component} from '@angular/core';
             <a class="nav-link" routerLink="">Home</a>
           </li>
           <li class="nav-item" routerLinkActive="active">
-            <a class="nav-link" routerLink="about">About</a>
+            <a class="nav-link" routerLink="about">Über</a>
+          </li>
+          <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link" routerLink="signin">Anmelden</a>
           </li>
         </ul>
       </div>

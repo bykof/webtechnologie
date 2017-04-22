@@ -2,21 +2,22 @@ import {Component} from '@angular/core';
 import {UserManagementService} from '../services/user_management.service';
 
 @Component({
+  selector: 'register',
   template: `
-    <div class="row">
-      <div class="col">
-        <div [hidden]="errorMessage != ''"
+    <div class="row justify-content-center">
+      <div class="col-8">
+        <div [hidden]="!apiError"
              class="alert alert-danger">
           Es ist ein Fehler aufgetreten
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col">
+    <div class="row justify-content-center">
+      <div class="col-8">
         <form #loginForm="ngForm" (ngSubmit)="doLogin()">
           <div class="form-group row">
-            <label for="email" class="col-2 col-form-label">Email</label>
-            <div class="col-10">
+            <label for="email" class="col-sm-2 col-form-label">Email</label>
+            <div class="col-sm-10">
               <input
                 type="email"
                 class="form-control"
@@ -33,8 +34,26 @@ import {UserManagementService} from '../services/user_management.service';
             </div>
           </div>
           <div class="form-group row">
-            <label for="password" class="col-2 col-form-label">Passwort</label>
-            <div class="col-10">
+            <label for="password" class="col-sm-2 col-form-label">Passwort</label>
+            <div class="col-sm-10">
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                #passwordInput="ngModel"
+                [(ngModel)]="password"
+                name="password"
+                required
+              >
+              <div [hidden]="passwordInput.valid || passwordInput.pristine"
+                   class="alert alert-danger">
+                Passwort muss eingegeben werden
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="password" class="col-sm-2 col-form-label">Passwort nochmal eingeben</label>
+            <div class="col-sm-10">
               <input
                 type="password"
                 class="form-control"
@@ -63,18 +82,21 @@ import {UserManagementService} from '../services/user_management.service';
     </div>
   `,
 })
-export class LoginComponent {
+export class RegisterComponent {
   email: String = '';
   password: String = '';
-  errorMessage: String = '';
+  apiError: String;
   
   constructor(private user_management_service: UserManagementService) {
   }
   
   doLogin() {
-    this.user_management_service.login(this.email, this.password).subscribe(
+    this.user_management_service.login(
+      this.email,
+      this.password
+    ).subscribe(
       user => user,
-      error => this.errorMessage = error
+      error => this.apiError = error
     );
   }
 }

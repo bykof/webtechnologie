@@ -3,7 +3,9 @@ import {PageNotFoundComponent} from './pagenotfound/pagenotfound.component';
 import {HomeComponent} from './pages/home.component';
 import {AboutComponent} from './pages/about.component';
 import {AuthGuard} from './services/user_management.service';
-import {LoginComponent} from './pages/login.component';
+import {SignInComponent} from './pages/signin.component';
+import {LoginComponent} from './components/login.component';
+import {RegisterComponent} from './components/register.component';
 
 const appRoutes: Routes = [
   {
@@ -12,9 +14,13 @@ const appRoutes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'login',
-    component: LoginComponent,
-    pathMatch: 'full',
+    path: 'signin',
+    component: SignInComponent,
+    children: [
+      {path: '', redirectTo: 'login', pathMatch: 'full'},
+      {path: 'login', component: LoginComponent},
+      {path: 'register', component: RegisterComponent},
+    ]
   },
   {
     path: 'about',
