@@ -1,8 +1,30 @@
 version: "2"
 services:
-  webapp:
-    build: webapp
+  file_storage:
+    build: file_storage
     ports:
-      - "3000:3000"
+      - "8080:8080"
     volumes:
-      - "./webapp:/webapp"
+      - "./file_storage:/file_storage"
+    links:
+      - file_storage_mongo_db
+      - file_storage_redis
+    depends_on:
+      - file_storage_mongo_db
+      - file_storage_redis
+  file_storage_mongo_db:
+    image: mongo
+    ports:
+      - "27017:27017"
+  file_storage_redis:
+    image: redis
+    ports:
+      - "6379:6379"
+  webapp:
+      build: webapp
+      ports:
+        - "3000:3000"
+      volumes:
+        - "./webapp:/webapp"
+      links:
+        - file_storage

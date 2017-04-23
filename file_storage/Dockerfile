@@ -1,6 +1,6 @@
 FROM node:latest
-WORKDIR /www
-COPY package.json /www/package.json
+WORKDIR /file_storage
+COPY package.json /file_storage/package.json
 ENV PORT 8080
 EXPOSE  8080
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]

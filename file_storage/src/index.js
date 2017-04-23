@@ -25,7 +25,8 @@ app.use(bodyParser.json({
 }));
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/files');
+mongoose.connect('mongodb://file_storage_mongo_db/files');
+
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => {
