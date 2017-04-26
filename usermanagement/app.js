@@ -1,10 +1,9 @@
-var express = require('express');
-var app = express();
+import express from 'express';
+let app = express();
 
-app.get('/', function(req, res){
-    res.send("Hello World");
-});
-
-app.listen(3000, function(){
-    console.log('Guuuude');
-});
+app.get('/', (req, res) => {
+      res.send('Hello World');
+    });
+app.listen(3000, () => {
+      console.log('Guuuude');
+    });
