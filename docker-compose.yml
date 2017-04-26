@@ -21,10 +21,24 @@ services:
     ports:
       - "6379:6379"
   webapp:
-      build: webapp
-      ports:
-        - "3000:3000"
-      volumes:
-        - "./webapp:/webapp"
-      links:
-        - file_storage
+    build: webapp
+    ports:
+      - "3000:3000"
+    volumes:
+      - "./webapp:/webapp"
+    links:
+      - file_storage
+  usermanagement:
+    build: usermanagement
+    ports:
+      - "3000:3000"
+    volumes:
+      - "./usermanagement:/usermanagement"
+    links:
+      - usermanagement
+    depends_on:
+      - usermanagement_mongo_db
+  usermanagement_mongo_db:
+    image: mongo
+    ports:
+      - "27017:27017"
