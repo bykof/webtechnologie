@@ -7,5 +7,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(process.env.PORT || config.PORT, function () {
-  console.log('Example app listening on port ' + process.env.PORT || config.PORT + '!');
+  console.log('Example app listening!');
 });
