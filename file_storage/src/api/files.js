@@ -34,5 +34,10 @@ export default {
         res.json(error);
       }
     )
+  },
+  update: (req, res) => {
+  
+  },
+  destroy: (req, res) => {
   }
 }

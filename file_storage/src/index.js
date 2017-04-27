@@ -8,6 +8,7 @@ import config from './config.json';
 import mongoose from 'mongoose';
 import files from './api/files';
 import 'express-resource';
+import swagger from 'swagger-express';
 
 let app = express();
 app.server = http.createServer(app);
@@ -30,6 +31,16 @@ mongoose.connect('mongodb://file_storage_mongo_db/files');
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => {
+  
+  app.use(swagger.init(app, {
+    apiVersion: '1.0',
+    swaggerVersion: '1.0',
+    swaggerURL: '/swagger',
+    swaggerUI: './public/swagger/',
+    basePath: 'http://localhost:3000',
+    apis: ['./api/files'],
+  }));
+  
   app.use(middleware({config}));
   app.resource('files', files);
   
@@ -37,5 +48,3 @@ db.once('open', () => {
   
   console.log(`Started on port ${app.server.address().port}`);
 });
-
-export default app;

@@ -24,7 +24,7 @@ import {Component} from '@angular/core';
           <li class="nav-item" routerLinkActive="active">
             <a class="nav-link" routerLink="about">Über</a>
           </li>
-          <li class="nav-item" routerLinkActive="active">
+          <li class="nav-item pull-right" routerLinkActive="active">
             <a class="nav-link" routerLink="signin">Anmelden</a>
           </li>
         </ul>
