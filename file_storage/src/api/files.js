@@ -1,14 +1,12 @@
 import File from '../models/file';
 import redis_client from '../redis_client';
+import redis from 'redis';
 
 export default {
   index: (req, res) => {
-    redis_client.set("bla", new Date, redis.print);
-    redis_client.hkeys("bla", function (err, replies) {
-      console.log(replies.length + " replies:");
-      replies.forEach(function (reply, i) {
-        console.log("    " + i + ": " + reply);
-      });
+    redis_client.set("bla", new Date(), redis.print);
+    redis_client.get("bla", (err, reply) => {
+      console.log(reply);
     });
     
     File.find().then(

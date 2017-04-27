@@ -23,8 +23,8 @@ initDB(
   () => {
     app.use(middleware({config}));
     app.resource('files', files);
-    app.listen(process.env.PORT || config.PORT, function () {
-      console.log('FileStorage app listening!');
+    let listener = app.listen(process.env.PORT || config.port, function(){
+      console.log('Listening on port ' + listener.address().port);
     });
   }
 );
