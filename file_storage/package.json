@@ -1,28 +1,13 @@
 {
-  "name": "express-es6-rest-api",
-  "version": "0.3.0",
-  "description": "Starter project for an ES6 RESTful Express API",
+  "name": "file_storage",
+  "version": "1.0.0",
+  "description": "File Storage Service",
   "main": "dist",
+  "author": "Michael Bykovski",
   "scripts": {
-    "dev": "nodemon -w src --exec \"babel-node src --presets es2015,stage-2\"",
-    "build": "babel src -s -D -d dist --presets es2015,stage-2",
-    "start": "node dist",
-    "prestart": "npm run -s build",
-    "test": "eslint src"
-  },
-  "eslintConfig": {
-    "extends": "eslint:recommended",
-    "parserOptions": {
-      "ecmaVersion": 7,
-      "sourceType": "module"
-    },
-    "env": {
-      "node": true
-    },
-    "rules": {
-      "no-console": 0,
-      "no-unused-vars": 1
-    }
+    "start": "nodemon -w src src/index.js --exec babel-node  --presets es2015,stage-2",
+    "build": "babel src -d dist",
+    "serve": "node dist/index.js"
   },
   "dependencies": {
     "express": "^4.15.2",

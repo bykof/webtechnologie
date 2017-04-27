@@ -9,11 +9,8 @@ import 'express-resource';
 import initDB from './db';
 
 let app = express();
-
-// logger
 app.use(morgan('dev'));
 
-// 3rd party middleware
 app.use(cors({
   exposedHeaders: config.corsHeaders
 }));
@@ -27,7 +24,7 @@ initDB(
     app.use(middleware({config}));
     app.resource('files', files);
     app.listen(process.env.PORT || config.PORT, function () {
-      console.log('Example app listening on port ' + process.env.PORT || config.PORT + '!');
+      console.log('FileStorage app listening!');
     });
   }
 );
