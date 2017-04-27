@@ -31,6 +31,8 @@ services:
     environment:
       - MONGODB_URL=file_storage_mongo_db
       - MONGODB_PORT=27017
+      - REDIS_URL=file_storage_redis
+      - REDIS_PORT=6379
   usermanagement:
     build: usermanagement
     ports:
