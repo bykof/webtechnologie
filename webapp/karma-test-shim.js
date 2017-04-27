@@ -7,7 +7,7 @@ Error.stackTraceLimit = 0; // "No stacktrace"" is usually best for app testing.
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000;
 
 // builtPaths: root paths for output ("built") files
-// get from karma.config.js, then prefix with '/base/' (default is 'src/')
+// get from karma.config.json, then prefix with '/base/' (default is 'src/')
 var builtPaths = (__karma__.config.builtPaths || ['src/'])
                  .map(function(p) { return '/base/'+p;});
 
@@ -53,7 +53,7 @@ System.config({
   },
 });
 
-System.import('systemjs.config.js')
+System.import('systemjs.config.json')
   .then(importSystemJsExtras)
   .then(initTestBed)
   .then(initTesting);

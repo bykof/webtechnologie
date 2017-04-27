@@ -6,7 +6,7 @@
 // AND THEN EVERYTIME ...
 //   1. Compile with `tsc`
 //   2. Make sure the test server (e.g., lite-server: localhost:8080) is running.
-//   3. ./node_modules/.bin/protractor protractor.config.js
+//   3. ./node_modules/.bin/protractor protractor.config.json
 //
 //   To do all steps, try:  `npm run e2e`
 
