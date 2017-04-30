@@ -4,7 +4,7 @@ import bodyparser from "body-parser";
 //import api from "./routes/api";
 
 // Setup Mongoose
-mongoose.connect("mongodb://localhost/noderest_test");
+mongoose.connect("mongodb://localhost/liabilities");
 
 // Setup Express
 let app = express();
