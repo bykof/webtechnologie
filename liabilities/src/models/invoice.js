@@ -1,14 +1,15 @@
 import restful from "node-restful";
-
 let mongoose = restful.mongoose;
 
-let liabilitySchema = new mongoose.Schema({
+let invoiceSchema = new mongoose.Schema({
     date: { type: Date, default: Date.now },
+    file_url: String,
     debt: Number,
-    debtor: Number,
+    payer: Number,
     settled: { type: Boolean, default: false }
 });
 
-liabilitySchema.statics.placerholder = (a, b) => {
-
+invoiceSchema.statics.OCR = (a, b) => {
 }
+
+export default restful.model("Invoice", invoiceSchema);
