@@ -5,10 +5,10 @@ import redis from 'redis';
 export default {
   index: (req, res) => {
     redis_client.set("bla", new Date(), redis.print);
-    redis_client.get("bla", (err, reply) => {
+    redis_client.get("bla", (error, reply) => {
       console.log(reply);
     });
-    
+
     File.find().then(
       (files) => {
         res.json(files);
@@ -43,7 +43,7 @@ export default {
     )
   },
   update: (req, res) => {
-  
+
   },
   destroy: (req, res) => {
   }

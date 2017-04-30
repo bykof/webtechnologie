@@ -3,7 +3,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import middleware from './middleware';
-import config from './config.json';
+import config from './config';
 import files from './api/files';
 import 'express-resource';
 import initDB from './db';

@@ -1,5 +1,4 @@
-FROM node:argon
-RUN mkdir /usermanagement
+FROM node:latest
 WORKDIR /usermanagement
 COPY package.json /usermanagement
 RUN npm install
