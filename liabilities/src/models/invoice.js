@@ -1,5 +1,4 @@
-import restful from "node-restful";
-let mongoose = restful.mongoose;
+import mongoose from "mongoose";
 
 let invoiceSchema = new mongoose.Schema({
     date: { type: Date, default: Date.now },
@@ -12,4 +11,4 @@ let invoiceSchema = new mongoose.Schema({
 invoiceSchema.statics.OCR = (a, b) => {
 }
 
-export default restful.model("Invoice", invoiceSchema);
+export default mongoose.model("Invoice", invoiceSchema);

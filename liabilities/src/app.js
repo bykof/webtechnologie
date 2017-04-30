@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
-import bodyparser from "body-parser";
-import api  from "./routes/api";
+import bodyParser from "body-parser";
+import invoiceRoutes from "./routes/invoice"
 
 // Setup Mongoose
 mongoose.connect("mongodb://localhost/liabilities");
@@ -10,11 +10,19 @@ mongoose.connect("mongodb://localhost/liabilities");
 let app = express();
 
 // Setup BodyParser
-app.use(bodyparser.urlencoded( { extended: true } ));
-app.use(bodyparser.json());
+app.use(bodyParser.urlencoded( { extended: true } ));
+app.use(bodyParser.json());
 
 // Routes
-app.use("/", api);
+let router = express.Router();
+
+router.get('/', (req, res) => {
+    res.json({ message: 'API reachable.' });
+});
+
+
+app.use("/invoice", invoiceRoutes);
+
 
 let port = 3000;
 app.listen(port);
