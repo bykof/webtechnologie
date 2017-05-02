@@ -1,14 +1,9 @@
 import File from '../models/file';
 import redis_client from '../redis_client';
-import redis from 'redis';
+import express from 'express';
 
 export default {
   index: (req, res) => {
-    redis_client.set("bla", new Date(), redis.print);
-    redis_client.get("bla", (error, reply) => {
-      console.log(reply);
-    });
-
     File.find().then(
       (files) => {
         res.json(files);
@@ -23,7 +18,13 @@ export default {
     let file = new File({uploaded: new Date()});
     file.save().then(
       (file) => {
-        res.json(file);
+        redis_client.set(
+          file.id,
+          req.files.image.data.toString('binary'),
+          (error, reply) => {
+            res.json(file);
+          }
+        );
       }
     ).catch(
       (error) => {
@@ -34,6 +35,7 @@ export default {
   show: (req, res) => {
     File.find({_id: req.params.file}).then(
       (file) => {
+        if (file.length === 0) res.sendStatus(404);
         res.json(file);
       }
     ).catch(
@@ -46,5 +48,21 @@ export default {
 
   },
   destroy: (req, res) => {
+    redis_client.del(req.params.file, (error, reply) => {
+      if (error) res.json(error);
+      File.remove({_id: req.params.file}, (error) => {
+        if (error) return res.json(error);
+      });
+      res.sendStatus(200);
+    });
   }
 }
+
+export let file_custom_routes = express();
+file_custom_routes.get('/files/:file/file', (req, res) => {
+  redis_client.get(req.params.file, (error, reply) => {
+    if (reply === null) return res.sendStatus(404);
+    res.header('Content-Type', 'image/jpg');
+    res.send(new Buffer(reply, 'binary'));
+  });
+});
