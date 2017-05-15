@@ -14,14 +14,8 @@ app.use(bodyParser.urlencoded( { extended: true } ));
 app.use(bodyParser.json());
 
 // Routes
-let router = express.Router();
-
-router.get('/', (req, res) => {
-    res.json({ message: 'API reachable.' });
-});
-
-
-app.use("/invoice", invoiceRoutes);
+app.use("/invoices", invoiceRoutes);
+app.use("/", (req, res) => { res.json({ message: 'API reachable.' }); });
 
 
 let port = 3000;
