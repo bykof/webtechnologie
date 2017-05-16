@@ -8,12 +8,24 @@ router.route("/")
     })
 
     /*
-    * Will be called from front-end service. Will create a liability based on a bill.
-    * Requires: "bill_url", "payer_id" as user who pays the bill.
+    * Will be called from front-end service.
+    * Will create a liability based on a bill. Requires:
+    * file_url:
+    * user_id:
     */
     .post((req, res) => {
-        console.log(req.body["test"]);
-        res.json({ message: 'Invoice POST reachable.' });
+        let ret = {};
+
+        if (req.body["file_url"] == null) {
+            ret["file_url"] = "missing";
+        }
+        if (req.body["user_id"] == null) {
+            ret["user_id"] = "missing";
+        }
+        else {
+            res.json({ message: 'Invoice POST reachable.' });
+        }
+        res.json(ret);
     })
 
 export default router;
