@@ -25,7 +25,7 @@ router.route("/")
         }
         else {
             let scanner = new ocr_scanner();
-            scanner.downloadImage(req.body["file_url"]);
+            scanner.scanRemote(req.body["file_url"]);
             ret["success"] = "OK";
         }
         res.json(ret);
