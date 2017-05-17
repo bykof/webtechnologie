@@ -18,7 +18,8 @@
     "express": "^4.15.2",
     "mongoose": "^4.9.6",
     "nodemon": "^1.11.0",
-    "request": "^2.81.0"
+    "request": "^2.81.0",
+    "tesseract.js": "^1.0.10"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

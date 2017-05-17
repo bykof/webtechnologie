@@ -1,4 +1,5 @@
 import express from "express";
+import ocr_scanner from "../scanners/ocr_scanner";
 
 let router = express.Router();
 
@@ -23,7 +24,9 @@ router.route("/")
             ret["user_id"] = "missing";
         }
         else {
-            res.json({ message: 'Invoice POST reachable.' });
+            let scanner = new ocr_scanner();
+            scanner.downloadImage(req.body["file_url"]);
+            ret["success"] = "OK";
         }
         res.json(ret);
     })
