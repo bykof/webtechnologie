@@ -20,6 +20,7 @@ export default {
         uploaded: new Date()
       }
     );
+  
     file.save().then(
       (file) => {
         redis_client.set(
@@ -33,7 +34,7 @@ export default {
       }
     ).catch(
       (error) => {
-        res.json(error);
+        return res.status(500).json(error);
       }
     );
   },
