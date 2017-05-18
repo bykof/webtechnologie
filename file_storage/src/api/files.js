@@ -10,18 +10,23 @@ export default {
       }
     ).catch(
       (error) => {
-        res.json(error);
+        res.status(500).json(error);
       }
     );
   },
   create: (req, res) => {
-    let file = new File({uploaded: new Date()});
+    let file = new File(
+      {
+        uploaded: new Date()
+      }
+    );
     file.save().then(
       (file) => {
         redis_client.set(
           file.id,
           req.files.image.data.toString('binary'),
           (error, reply) => {
+            if (error) return res.status(500).json(error);
             res.json(file);
           }
         );
@@ -40,20 +45,20 @@ export default {
       }
     ).catch(
       (error) => {
-        res.json(error);
+        res.status(500).json(error);
       }
     )
   },
   update: (req, res) => {
-
+  
   },
   destroy: (req, res) => {
     redis_client.del(req.params.file, (error, reply) => {
-      if (error) res.json(error);
+      if (error) res.status(500).json(error);
       File.remove({_id: req.params.file}, (error) => {
-        if (error) return res.json(error);
+        if (error) return res.status(500).json(error);
+        res.sendStatus(204);
       });
-      res.sendStatus(200);
     });
   }
 }
