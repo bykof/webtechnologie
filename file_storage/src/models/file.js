@@ -4,7 +4,7 @@ class File extends mongoose.Schema {
   constructor() {
     super({
       uploaded: Date,
-      user_id: Number,
+      user_id: String,
     })
   }
 }
