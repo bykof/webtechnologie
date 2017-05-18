@@ -13,7 +13,7 @@ import {Component} from '@angular/core';
       <a
         class="navbar-brand"
         routerLink="">
-        Split|it
+        Spliddit
       </a>
 
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
