@@ -1,17 +1,28 @@
-import {extendObservable} from 'mobx';
+import {extendObservable, computed} from 'mobx';
+import Cookies from 'js-cookie';
 
 
 export default class UserStore {
+  COOKIE_NAME = 'api-key';
+  
   constructor() {
     extendObservable(
       this,
       {
-        count: 0,
+        username: '',
+        password: '',
+        logged_in: computed(
+          () => Cookies.get(this.COOKIE_NAME) !== undefined
+        ),
       }
     );
   }
   
-  increment() {
-    this.count++;
+  log_in() {
+  
+  }
+  
+  register() {
+  
   }
 }
