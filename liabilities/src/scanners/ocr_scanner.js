@@ -44,19 +44,14 @@ class OCRScanner {
 
         return new Promise((resolve, reject) => {
                     request(file_url).pipe(writeStream).on("close", () => {
-                        this.cropAndOverride(filename)
-                            .catch((error) => {
-                                console.error(error);
-                            })
-                            .then((image) => {
-                                console.log("Crop successful...");
-                                // OCR scan
-                                tesseract.recognize(filename)
-                                    .progress((p) => { console.log(p)})
-                                    .catch(err => reject(err))
-                                    .then((result) => {
-                                        resolve(result.text);
-                                    })
+                        // OCR scan
+                        tesseract.recognize(filename, {
+                            lang: 'eng'
+                        })
+                            .progress((p) => { console.log(p)})
+                            .catch(err => reject(err))
+                            .then((result) => {
+                                resolve(result.text);
                             })
                     });
                 }
