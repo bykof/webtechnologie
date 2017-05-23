@@ -26,8 +26,7 @@ router.route("/")
         else {
             let scanner = new ocr_scanner();
             scanner.scanRemote(req.body["file_url"])
-                .catch((error) =>
-                {
+                .catch((error) => {
                     console.error(error)
                 })
                 .then((result) => {
