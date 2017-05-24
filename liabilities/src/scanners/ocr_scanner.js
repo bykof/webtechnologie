@@ -46,9 +46,9 @@ class OCRScanner {
                     request(file_url).pipe(writeStream).on("close", () => {
                         // OCR scan
                         tesseract.recognize(filename, {
-                            lang: 'eng'
+                            lang: 'deu'
                         })
-                            .progress((p) => { console.log(p)})
+                            //.progress((p) => { console.log(p)})
                             .catch(err => reject(err))
                             .then((result) => {
                                 resolve(result.text);

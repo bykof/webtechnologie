@@ -1,5 +1,6 @@
 import express from "express";
-import ocr_scanner from "../scanners/ocr_scanner";
+import ocrScanner from "../scanners/ocr_scanner";
+import receiptScanner from "../scanners/receipt_scanner";
 
 let router = express.Router();
 
@@ -24,13 +25,18 @@ router.route("/")
             ret["user_id"] = "missing";
         }
         else {
-            let scanner = new ocr_scanner();
-            scanner.scanRemote(req.body["file_url"])
+            let ocr_scanner = new ocrScanner();
+            let receipt_scanner = new receiptScanner();
+
+            ocr_scanner.scanRemote(req.body["file_url"])
+                .then((result) => {
+                    receipt_scanner.extractTotalPrice(result)
+                        .then((result) => {
+
+                        });
+                })
                 .catch((error) => {
                     console.error(error)
-                })
-                .then((result) => {
-                    console.log(result);
                 })
             ret["success"] = "OK";
         }
