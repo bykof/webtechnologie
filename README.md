@@ -3,6 +3,8 @@ _Teile die Kosten in einer Gruppe auf_
 
 _Spliddit ermöglicht es dir, Kosten in einer Gruppe gleich oder verschieden aufzuteilen._
 
+[Kanban Board](https://waffle.io/bykof/webtechnologie)
+
 ## Installation
 TBD
 
