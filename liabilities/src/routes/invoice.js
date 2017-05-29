@@ -6,27 +6,39 @@ import invoice from "../models/invoice";
 let router = express.Router();
 
 router.route("/")
+    /*
+    * Will return full receipt info. Requires:
+    * invoice_id.
+    */
     .get((req, res) => {
-        res.json({ message: 'Invoice GET reachable.' });
+        if (req.query.id == null) {
+            res.json({
+                "id": "Missing. Please pass with id=value."
+            });
+        }
+        invoice.findOne({
+            _id: req.query.id
+            },
+            (err, doc) => {
+                if (doc) res.json(doc);
+            });
     })
 
     /*
     * Will be called from front-end service.
     * Will create a liability based on a bill. Requires:
-    * file_url:
-    * user_id:
+    * file_url: The url of the uploaded receipt.
+    * user_id: The user who is creating the invoice.
     */
     .post((req, res) => {
-        let ret = {};
-
         if (req.body["file_url"] == null) {
             res.json({
-                "file_url": "missing"
+                "file_url": "Missing"
             });
         }
         if (req.body["user_id"] == null) {
             res.json({
-                "user_id": "missing"
+                "user_id": "Missing"
             });
         }
         else {
