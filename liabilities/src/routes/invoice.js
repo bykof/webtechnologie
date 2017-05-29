@@ -75,4 +75,27 @@ router.route("/")
         }
     })
 
+    .put((req, res) => {
+        if (req.body["id"] == null) {
+            res.json({
+                "id": "Missing."
+            });
+        }
+        if (req.body["total_price"] == null) {
+            res.json({
+                "total_price": "Missing."
+            });
+        }
+        else {
+            invoice.findOne({_id: req.body["id"]}, (err, doc) => {
+                if (doc) res.total_price = req.body["total_price"];
+
+                doc.save((err) => {
+                    if (err) res.json({"error": err});
+                    else res.json(doc);
+                });
+            })
+        }
+    })
+
 export default router;
