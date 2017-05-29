@@ -6,8 +6,4 @@ let invoiceSchema = new mongoose.Schema({
     total_price: { type: Number, required: true },
 });
 
-invoiceSchema.statics.OCR = (a, b) => {
-    //TODO
-}
-
 export default mongoose.model("Invoice", invoiceSchema);

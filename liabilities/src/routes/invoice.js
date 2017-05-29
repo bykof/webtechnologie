@@ -1,6 +1,7 @@
 import express from "express";
 import ocrScanner from "../scanners/ocr_scanner";
 import receiptScanner from "../scanners/receipt_scanner";
+import invoice from "../models/invoice";
 
 let router = express.Router();
 
@@ -19,10 +20,14 @@ router.route("/")
         let ret = {};
 
         if (req.body["file_url"] == null) {
-            ret["file_url"] = "missing";
+            res.json({
+                "file_url": "missing"
+            });
         }
         if (req.body["user_id"] == null) {
-            ret["user_id"] = "missing";
+            res.json({
+                "user_id": "missing"
+            });
         }
         else {
             let ocr_scanner = new ocrScanner();
@@ -32,15 +37,30 @@ router.route("/")
                 .then((result) => {
                     receipt_scanner.extractTotalPrice(result)
                         .then((result) => {
+                            // Attempt to save the new model.
+                            var new_invoice = invoice({
+                                file_url: req.body["file_url"],
+                                user_id: req.body["user_id"],
+                                total_price: result
+                            });
 
+                            new_invoice.save((err) => {
+                               if (err) {
+                                   res.json({
+                                       "error": err
+                                   });
+                               } else {
+                                 res.json({
+                                     invoice_id: new_invoice._id
+                                 })
+                               }
+                            });
                         });
                 })
                 .catch((error) => {
                     console.error(error)
                 })
-            ret["success"] = "OK";
         }
-        res.json(ret);
     })
 
 export default router;
