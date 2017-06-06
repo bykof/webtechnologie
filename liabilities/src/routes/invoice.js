@@ -1,7 +1,9 @@
 import express from "express";
 import ocrScanner from "../scanners/ocr_scanner";
 import receiptScanner from "../scanners/receipt_scanner";
-import invoice from "../models/invoice";
+import Invoice from "../models/invoice";
+import InvoiceItem from "../models/invoice_item";
+
 
 let router = express.Router();
 
@@ -11,32 +13,41 @@ router.route("/")
     * invoice_id.
     */
     .get((req, res) => {
-        if (req.query.id == null) {
+        /* Dev options */
+        if (req.query.dev == "all") {
+            Invoice.find({},
+                (err, doc) => {
+                    if (doc) res.json(doc);
+                });
+        }
+        else if (!req.query.id) {
             res.json({
                 "id": "Missing. Please pass with id=value."
             });
         }
-        invoice.findOne({
-            _id: req.query.id
-            },
-            (err, doc) => {
-                if (doc) res.json(doc);
-            });
+        else {
+            Invoice.findOne({
+                    _id: req.query.id
+                },
+                (err, doc) => {
+                    if (doc) res.json(doc);
+                });
+        }
     })
 
     /*
     * Will be called from front-end service.
     * Will create a liability based on a bill. Requires:
     * file_url: The url of the uploaded receipt.
-    * user_id: The user who is creating the invoice.
+    * user_id: The user who is creating the Invoice.
     */
     .post((req, res) => {
-        if (req.body["file_url"] == null) {
+        if (!req.body["file_url"]) {
             res.json({
                 "file_url": "Missing"
             });
         }
-        if (req.body["user_id"] == null) {
+        else if (!req.body["user_id"]) {
             res.json({
                 "user_id": "Missing"
             });
@@ -50,7 +61,7 @@ router.route("/")
                     receipt_scanner.extractTotalPrice(result)
                         .then((result) => {
                             // Attempt to save the new model.
-                            var new_invoice = invoice({
+                            var new_invoice = Invoice({
                                 file_url: req.body["file_url"],
                                 user_id: req.body["user_id"],
                                 total_price: result
@@ -76,24 +87,27 @@ router.route("/")
     })
 
     .put((req, res) => {
-        if (req.body["id"] == null) {
+        if (!req.body["id"]) {
             res.json({
                 "id": "Missing."
             });
         }
-        if (req.body["total_price"] == null) {
+        if (!req.body["total_price"]) {
             res.json({
                 "total_price": "Missing."
             });
         }
         else {
-            invoice.findOne({_id: req.body["id"]}, (err, doc) => {
-                if (doc) res.total_price = req.body["total_price"];
+            Invoice.findOne({_id: req.body["id"]}, (err, invoice_found) => {
+                if (invoice_found) {
+                    if (req.body["total_price"])
+                        invoice_found.total_price = req.body["total_price"];
 
-                doc.save((err) => {
-                    if (err) res.json({"error": err});
-                    else res.json(doc);
-                });
+                    invoice_found.save((err) => {
+                        if (err) res.json({"error": err});
+                        else res.json(invoice_found);
+                    });
+                }
             })
         }
     })
