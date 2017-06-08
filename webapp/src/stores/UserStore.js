@@ -9,8 +9,9 @@ export default class UserStore {
     extendObservable(
       this,
       {
-        username: '',
+        email: '',
         password: '',
+        password_again: '',
         logged_in: computed(
           () => Cookies.get(this.COOKIE_NAME) !== undefined
         ),

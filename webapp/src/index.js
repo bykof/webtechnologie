@@ -2,11 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App';
 
-import {BrowserRouter as Router} from 'react-router-dom';
+import './initjQuery';
+import 'imperavi-kube/dist/css/kube.min.css';
+import 'imperavi-kube/dist/js/kube.min';
+
+import './styles/index.css';
+
 
 ReactDOM.render(
-  <Router>
-    <App/>
-  </Router>,
+  <App/>,
   document.getElementById('root')
 );
