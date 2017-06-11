@@ -5,6 +5,7 @@ import App from './components/App';
 import './initjQuery';
 import 'imperavi-kube/dist/css/kube.min.css';
 import 'imperavi-kube/dist/js/kube.min';
+import 'font-awesome/css/font-awesome.min.css';
 
 import './styles/index.css';
 

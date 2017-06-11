@@ -9,6 +9,8 @@ export default class UserStore {
     extendObservable(
       this,
       {
+        first_name: '',
+        last_name: '',
         email: '',
         password: '',
         password_again: '',
@@ -20,10 +22,10 @@ export default class UserStore {
   }
   
   log_in() {
-  
+    return true;
   }
   
   register() {
-  
+    return true;
   }
 }
