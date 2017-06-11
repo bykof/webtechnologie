@@ -20,10 +20,14 @@ export default observer(
       this.user_store = new UserStore();
     }
     
+    render_homepage(props) {
+      return (<HomePage {...props} user_store={this.user_store}/>);
+    }
+    
     render_login(props) {
       return (<Login {...props} user_store={this.user_store}/>);
     }
-  
+    
     render_logout(props) {
       return (<Logout {...props} user_store={this.user_store}/>);
     }
@@ -36,12 +40,12 @@ export default observer(
       return (
         <Router>
           <div>
-            <Navbar user_store={this.user_store} />
+            <Navbar user_store={this.user_store}/>
             <div className="content">
               <Route
                 exact={true}
                 path={ROOT}
-                component={HomePage}
+                render={this.render_homepage.bind(this)}
               />
               <Route
                 path={LOGIN}
