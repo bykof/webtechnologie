@@ -45,7 +45,7 @@ services:
     depends_on:
       - usermanagement_mongo_db
     environment:
-      - MONGODB_URL=file_storage_mongo_db
+      - MONGODB_URL=usermanagement_mongo_db
       - MONGODB_PORT=27018
       - PORT=8001
   webapp:
