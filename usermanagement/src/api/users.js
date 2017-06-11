@@ -1,45 +1,109 @@
 var express = require('express');
+var bcrypt = require('bcrypt');
 
 var router = express.Router();
 
 var User = require('../schemas/User');
 
+var config = require('../config');
+
+function error_response(response, error) {
+  console.log(error);
+  response.status(500).json(error);
+}
+
 router.get(
   '/',
-  function(request, response) {
-    User.find(
-      function (error, users) {
-        if (error) return console.error(error);
+  function (request, response) {
+    User.find().then(
+      function (users) {
         response.json(users);
       }
-    );
+    ).catch(function (error) {
+      error_response(response, error);
+    });
   }
 );
 
 router.post(
   '/',
-  function(request, response) {
+  function (request, response) {
     var body = request.body;
-    var user = new User({name: body.name, email: body.email, password: body.password});
-    user.save(function (error, user) {
-      if (error) return console.error(error);
-      response.json(user);
+    
+    User.find({email: body.email}).then(
+      function (users) {
+        if (users.length > 0) {
+          response.status(400).json({error: 'user_already_exists'});
+        }
+      }
+    ).catch(
+      function (error) {
+        error_response(response, error);
+      }
+    );
+    
+    bcrypt.genSalt(config.SALT_ROUNDS, function (err, salt) {
+      bcrypt.hash(body.password, salt, function (err, hash) {
+        var user = new User(
+          {
+            first_name: body.first_name,
+            last_name: body.last_name,
+            email: body.email,
+            password: hash
+          }
+        );
+        user.save().then(
+          function (user) {
+            response.status(201).json(user);
+          }
+        ).catch(function (error) {
+          error_response(response, error);
+        });
+      });
+    });
+  }
+);
+
+router.post(
+  '/login',
+  function (request, response) {
+    var body = request.body;
+    User.find(
+      {email: body.email}
+    ).then(
+      function (users) {
+        if (users.length === 1) {
+          bcrypt.compare(body.password, users[0].password, function (error, result) {
+            if (result) {
+              response.status(200).json(users[0]);
+            } else {
+              response.status(403).json({error: 'password_not_correct'});
+            }
+          });
+        } else {
+          response.status(403).json({error: 'user_not_found'});
+        }
+      }
+    ).catch(function (error) {
+      error_response(response, error);
     });
   }
 );
 
 router.delete(
   '/:user_id',
-  function(request, response) {
+  function (request, response) {
     var user_id = request.params.user_id;
     User.find(
       {_id: user_id}
-    ).remove(
-      function(error, removed) {
-        if (error) return console.error(error);
+    ).remove().then(
+      function () {
         response.sendStatus(203);
       }
-    );
+    ).catch(function (error) {
+      error_response(response, error);
+    });
   }
 );
+
 module.exports = router;

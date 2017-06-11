@@ -4,7 +4,9 @@ import {NavLink} from 'react-router-dom';
 import {observer} from 'mobx-react';
 
 import '../styles/Navbar.css';
-import {LOGIN, ABOUT} from "../routes_constants";
+import {LOGIN, ABOUT, LOGOUT} from "../routes_constants";
+import IsLoggedIn from "./IsLoggedIn";
+import IsNotLoggedIn from "./IsNotLoggedIn";
 
 export default observer(
   class Navbar extends Component {
@@ -14,7 +16,7 @@ export default observer(
         navbar_open: false
       };
     }
-  
+    
     toggle_navbar() {
       this.setState({navbar_open: !this.state.navbar_open});
     }
@@ -29,7 +31,7 @@ export default observer(
                   Splittid
                 </NavLink>
               </div>
-              <a href="#" id="nav-toggle" onClick={this.toggle_navbar.bind(this)}>
+              <a id="nav-toggle" onClick={this.toggle_navbar.bind(this)}>
                 <i className="kube-menu"/>
               </a>
             </div>
@@ -47,15 +49,24 @@ export default observer(
             <nav id="top-nav-extra">
               <ul>
                 <li>
-                  <NavLink to={LOGIN}>
-                    Anmelden
-                  </NavLink>
+                  <IsNotLoggedIn user_store={this.props.user_store}>
+                    <NavLink to={LOGIN}>
+                      Anmelden
+                    </NavLink>
+                  </IsNotLoggedIn>
                 </li>
                 <li>
                   <NavLink to={ABOUT}>
                     About
                   </NavLink>
                 </li>
+                <IsLoggedIn user_store={this.props.user_store}>
+                  <li>
+                    <NavLink to={LOGOUT}>
+                      Logout
+                    </NavLink>
+                  </li>
+                </IsLoggedIn>
               </ul>
             </nav>
           </div>
