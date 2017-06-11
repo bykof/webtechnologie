@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 
 var users = require('./api/users');
+var groups = require('./api/groups');
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -15,6 +16,7 @@ app.get('/', function (req, res) {
 });
 
 app.use('/users', users);
+app.use('/groups', groups);
 
 initDatabase(
   function () {

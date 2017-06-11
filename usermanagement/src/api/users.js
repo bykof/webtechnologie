@@ -25,6 +25,20 @@ router.get(
   }
 );
 
+router.get(
+  '/:user_id',
+  function (request, response) {
+    User.findOne({_id: request.params.user_id}).then(
+      function (user) {
+        if (!user) return response.sendStatus(404);
+        response.json(user);
+      }
+    ).catch(function (error) {
+      error_response(response, error);
+    });
+  }
+);
+
 router.post(
   '/',
   function (request, response) {
