@@ -82,21 +82,18 @@ router.post(
   '/login',
   function (request, response) {
     var body = request.body;
-    User.find(
+    User.findOne(
       {email: body.email}
     ).then(
-      function (users) {
-        if (users.length === 1) {
-          bcrypt.compare(body.password, users[0].password, function (error, result) {
-            if (result) {
-              response.status(200).json(users[0]);
-            } else {
-              response.status(403).json({error: 'password_not_correct'});
-            }
-          });
-        } else {
-          response.status(403).json({error: 'user_not_found'});
-        }
+      function (user) {
+        if (!user) return response.status(403).json({error: 'user_not_found'});
+        bcrypt.compare(body.password, user.password, function (error, result) {
+          if (result) {
+            response.status(200).json(user);
+          } else {
+            response.status(403).json({error: 'password_not_correct'});
+          }
+        });
       }
     ).catch(function (error) {
       error_response(response, error);
