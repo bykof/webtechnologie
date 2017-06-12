@@ -80,6 +80,7 @@ router.route("/")
     /*
     * Will update the role of the user. Can only be changed from creditor to debtor
     * or vice versa.
+    * invoice_item_id: Required.
     */
     .put((req, res) => {
         if (!req.body["invoice_item_id"]) {
@@ -116,4 +117,39 @@ router.route("/")
         })
     })
 
+    /*
+    * Will delete an invoice item if it exists.
+    */
+    .delete((req, res) => {
+        if (!req.body["invoice_item_id"]) {
+            res.json({
+                "invoice_item_id": "Missing."
+            });
+        }
+
+        InvoiceItem.count({_id: req.body["invoice_item_id"]}, (err, count) => {
+            if (count <= 0) {
+                res.json({
+                    "id": "Invoice item with this ID not found."
+                });
+            }
+            else {
+                InvoiceItem.findOne({
+                        _id: req.body["invoice_item_id"]
+                    },
+                    (err, item_found) => {
+                        if (item_found) {
+                            item_found.delete((err) => {
+                                if (err) res.json({"error": err});
+                                else {
+                                    res.json({
+                                        invoice_item_id: "Deleted"
+                                    })
+                                }
+                            });
+                        }
+                    });
+            }
+        })
+    })
 export default router;
