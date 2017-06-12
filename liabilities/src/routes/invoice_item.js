@@ -6,8 +6,13 @@ import InvoiceItem from "../models/invoice_item";
 let router = express.Router();
 
 router.route("/")
-/*
+    /*
     * Will create role on the invoice for the user.
+    * User ID can't already exist for the invoice. If it does, it's role has to be
+    * changed with the PUT method.
+    * invoice_id: ID of the invoice on which items shall be attached on.
+    * user_id: ID of the user to be attached.
+    * role: Role of the attached user. Either creditor (get money) or debtor (give money).
     */
     .post((req, res) => {
         if (!req.body["invoice_id"]) {
@@ -27,7 +32,7 @@ router.route("/")
         }
 
         // Check if passed invoice id exists.
-        Invoice.count({_id: req.body["invoice_id"]}, function (err, count){
+        Invoice.count({_id: req.body["invoice_id"]}, (err, count) =>{
             if(count <= 0) {
                 res.json({
                     "id": "Invoice with this ID not found."
@@ -70,6 +75,45 @@ router.route("/")
             }
         })
 
+    })
+
+    /*
+    * Will update the role of the user. Can only be changed from creditor to debtor
+    * or vice versa.
+    */
+    .put((req, res) => {
+        if (!req.body["invoice_item_id"]) {
+            res.json({
+                "invoice_item_id": "Missing."
+            });
+        }
+
+        InvoiceItem.count({_id: req.body["invoice_item_id"]}, (err, count) => {
+            if (count <= 0) {
+                res.json({
+                    "id": "Invoice item with this ID not found."
+                });
+            }
+            else {
+                InvoiceItem.findOne({
+                        _id: req.body["invoice_item_id"]
+                    },
+                    (err, item_found) => {
+                        if (item_found) {
+                            item_found.role = req.body["role"];
+
+                            item_found.save((err) => {
+                                if (err) res.json({"error": err});
+                                else {
+                                    res.json({
+                                        invoice_item_id: item_found._id
+                                    })
+                                }
+                            });
+                        }
+                    });
+            }
+        })
     })
 
 export default router;

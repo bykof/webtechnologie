@@ -2,7 +2,6 @@ import express from "express";
 import ocrScanner from "../scanners/ocr_scanner";
 import receiptScanner from "../scanners/receipt_scanner";
 import Invoice from "../models/invoice";
-import InvoiceItem from "../models/invoice_item";
 
 
 let router = express.Router();

@@ -4,7 +4,7 @@
   "description": "Microservice in charge of managing liabilities between users.",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon -w src src/app.js --exec babel-node --presets es2015,stage-2",
+    "start": "nodemon -w src src/app.js --debug --exec babel-node --presets es2015,stage-2",
     "build": "babel src -d dist",
     "serve": "node dist/index.js"
   },
@@ -23,6 +23,7 @@
     "tesseract.js": "^1.0.10"
   },
   "devDependencies": {
+    "nodemon": "^1.11.0",
     "babel-cli": "^6.24.1",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1"

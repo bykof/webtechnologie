@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 
 // Routes
 app.use("/invoices", invoiceRoutes);
-app.use("/invoice-items", invoiceItemRoutes);
+app.use("/invoice_items", invoiceItemRoutes);
 app.use("/", (req, res) => { res.json({ message: 'API reachable.' }); });
 
 
