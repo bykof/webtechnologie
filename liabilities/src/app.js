@@ -1,8 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
-import invoiceRoutes from "./routes/invoice"
-import invoiceItemRoutes from "./routes/invoice_item";
+import invoiceRoutes from "./routes/invoices"
+import invoiceItemRoutes from "./routes/invoice_items";
+import paymentRoutes from "./routes/payments";
 
 // Setup Mongoose
 mongoose.connect("mongodb://localhost/liabilities");
@@ -17,6 +18,7 @@ app.use(bodyParser.json());
 // Routes
 app.use("/invoices", invoiceRoutes);
 app.use("/invoice_items", invoiceItemRoutes);
+app.use("/payments", paymentRoutes);
 app.use("/", (req, res) => { res.json({ message: 'API reachable.' }); });
 
 

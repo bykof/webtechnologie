@@ -13,6 +13,7 @@ router.route("/")
     * invoice_id: ID of the invoice on which items shall be attached on.
     * user_id: ID of the user to be attached.
     * role: Role of the attached user. Either creditor (get money) or debtor (give money).
+    * advanced_money: The money the credit has advanced for the invoice.
     */
     .post((req, res) => {
         if (!req.body["invoice_id"]) {
@@ -45,6 +46,17 @@ router.route("/")
                     user_id: req.body["user_id"],
                     role: req.body["role"]
                 });
+
+                if (new_invoice_item.role == "creditor") {
+                    if (!req.body["advanced_money"]) {
+                        res.json({
+                            "advanced_money": "Missing."
+                        });
+                    }
+                    else {
+                        new_invoice_item.advanced_price = req.body["advanced_money"];
+                    }
+                }
 
                 new_invoice_item.save((err) => {
                     if (err) {
