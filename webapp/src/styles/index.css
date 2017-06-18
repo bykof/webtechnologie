@@ -5,3 +5,8 @@
 .content {
     padding: 40px;
 }
+
+.button.red {
+    color: #fff;
+    background-color: #ff3366;
+}

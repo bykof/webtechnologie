@@ -25,6 +25,20 @@ router.get(
   }
 );
 
+router.delete(
+  '/',
+  function (request, response) {
+    User.remove({}).then(
+      function (users) {
+        response.sendStatus(203);
+      }
+    ).catch(function (error) {
+      error_response(response, error);
+    });
+  }
+);
+
+
 router.get(
   '/:user_id',
   function (request, response) {
@@ -32,6 +46,29 @@ router.get(
       function (user) {
         if (!user) return response.sendStatus(404);
         response.json(user);
+      }
+    ).catch(function (error) {
+      error_response(response, error);
+    });
+  }
+);
+
+router.post(
+  '/:user_id/clear_groups/',
+  function (request, response) {
+    User.findOne({_id: request.params.user_id}).then(
+      function (user) {
+        if (!user) return response.sendStatus(404);
+        user.groups = [];
+        user.save().then(
+          () => {
+            response.json(user);
+          }
+        ).catch(
+          function (error) {
+            error_response(response, error);
+          }
+        );
       }
     ).catch(function (error) {
       error_response(response, error);

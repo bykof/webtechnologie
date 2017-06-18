@@ -4,7 +4,7 @@
   "description": "Microservice in charge of managing liabilities between users.",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon -w src src/app.js --debug --exec babel-node --presets es2015,stage-2",
+    "start": "nodemon -w src src/app.js --inspect --exec babel-node --presets es2015,stage-2",
     "build": "babel src -d dist",
     "serve": "node dist/index.js"
   },

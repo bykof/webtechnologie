@@ -4,7 +4,7 @@ import {NavLink} from 'react-router-dom';
 import {observer} from 'mobx-react';
 
 import '../styles/Navbar.css';
-import {LOGIN, ABOUT, LOGOUT} from "../routes_constants";
+import {LOGIN, ABOUT, LOGOUT, GROUPS} from "../routes_constants";
 import IsLoggedIn from "./IsLoggedIn";
 import IsNotLoggedIn from "./IsNotLoggedIn";
 
@@ -39,7 +39,7 @@ export default observer(
           <div id="top" className={classNames({'hide-sm': this.state.navbar_open})}>
             <div id="top-brand">
               <NavLink to="/">
-                Splitted
+                Splittid
               </NavLink>
             </div>
             <nav id="top-nav-main">
@@ -48,13 +48,22 @@ export default observer(
             </nav>
             <nav id="top-nav-extra">
               <ul>
-                <li>
-                  <IsNotLoggedIn user_store={this.props.user_store}>
+                
+                <IsNotLoggedIn user_store={this.props.user_store}>
+                  <li>
                     <NavLink to={LOGIN}>
                       Anmelden
                     </NavLink>
-                  </IsNotLoggedIn>
-                </li>
+                  </li>
+                </IsNotLoggedIn>
+                <IsLoggedIn user_store={this.props.user_store}>
+                  <li>
+                    <NavLink to={GROUPS}>
+                      Gruppen
+                    </NavLink>
+                  </li>
+                </IsLoggedIn>
+                
                 <li>
                   <NavLink to={ABOUT}>
                     About

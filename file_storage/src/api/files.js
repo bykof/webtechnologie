@@ -2,6 +2,7 @@ import File from '../models/file';
 import redis_client from '../redis_client';
 import express from 'express';
 
+
 export default {
   index: (req, res) => {
     File.find().then(

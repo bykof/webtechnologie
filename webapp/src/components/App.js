@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {observer} from 'mobx-react';
 import {Route, BrowserRouter as Router} from "react-router-dom";
 
-import {ROOT, LOGIN, REGISTRATION, ABOUT, LOGOUT} from '../routes_constants';
+import {ROOT, LOGIN, REGISTRATION, ABOUT, LOGOUT, GROUPS} from '../routes_constants';
 
 import HomePage from './HomePage';
 import Login from "./Login";
@@ -11,6 +11,7 @@ import UserStore from "../stores/UserStore";
 import Navbar from "./Navbar";
 import About from "./About";
 import Logout from "./Logout";
+import Groups from "./groups/Groups";
 
 export default observer(
   class App extends Component {
@@ -34,6 +35,10 @@ export default observer(
     
     render_registration(props) {
       return (<Registration {...props} user_store={this.user_store}/>);
+    }
+    
+    render_groups(props) {
+      return (<Groups {...props} user_store={this.user_store}/>);
     }
     
     render() {
@@ -62,6 +67,10 @@ export default observer(
               <Route
                 path={LOGOUT}
                 render={this.render_logout.bind(this)}
+              />
+              <Route
+                path={GROUPS}
+                render={this.render_groups.bind(this)}
               />
             </div>
           </div>

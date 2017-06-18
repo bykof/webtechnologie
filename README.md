@@ -21,6 +21,14 @@ Hierbei wurde versucht die neusten Webtechnologien auszutesten wie zum Beispiel:
 
 Der Augenmerk wurde auf eine schnelle Entwicklung in kurzer Zeit gelegt. 
 
+## Infos
+
+- Portvergabe:
+    - file_storage: `8000`
+    - liabilities: `8001` 
+    - usermanagement: `8002`
+    - webapp: `3000`
+
 ## Entwickler
 
 - Onur Karaman

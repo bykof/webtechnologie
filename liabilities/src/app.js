@@ -22,6 +22,6 @@ app.use("/payments", paymentRoutes);
 app.use("/", (req, res) => { res.json({ message: 'API reachable.' }); });
 
 
-let port = 3000;
+let port = 8001;
 app.listen(port);
 console.log("Listening on port " + port);

@@ -42,12 +42,33 @@ router.post(
   }
 );
 
+router.delete(
+  '/',
+  function (request, response) {
+    Group.find({}).then(
+      function (groups) {
+        groups.forEach(
+          function (group) {
+            group.remove();
+          }
+        );
+        response.sendStatus(203);
+      }
+    ).catch(
+      function (error) {
+        error_response(response, error);
+      }
+    )
+  }
+);
+
 router.get(
   '/:group_id',
   function (request, response) {
-    Group.find({_id: request.params.group_id}).then(
+    Group.findOne({_id: request.params.group_id}).then(
       function (group) {
-        response.status(201).json(group);
+        if (!group) return response.sendStatus(404);
+        response.json(group);
       }
     ).catch(
       function (error) {
@@ -80,6 +101,29 @@ router.post(
   }
 );
 
+router.delete(
+  '/:group_id',
+  function (request, response) {
+    Group.find({_id: request.params.group_id}).then(
+      function (groups) {
+        if (!groups) return response.sendStatus(404);
+        groups.forEach(
+          function (group) {
+            group.remove().then(
+              function () {
+                return response.sendStatus(203);
+              }
+            );
+          }
+        );
+      }
+    ).catch(
+      function (error) {
+        error_response(response, error);
+      }
+    )
+  }
+);
 
 router.post(
   '/:group_id/remove_user/:user_id',
