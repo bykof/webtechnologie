@@ -31,6 +31,7 @@ export default observer(
               this.props.user_store.groups.push(group_store);
             }
           );
+          group_store.initGroup();
         }
       );
     }

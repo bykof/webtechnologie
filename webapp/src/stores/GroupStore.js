@@ -21,8 +21,9 @@ export default class GroupStore {
       usermanagement_url + 'groups/' + this.id,
     ).then(
       (response) => {
+        this.users.clear();
         this.name = response.data.name;
-        this.users = response.data.users;
+        response.data.users.forEach((user) => this.users.push(user));
       }
     ).catch(
       (error) => {

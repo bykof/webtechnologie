@@ -19,6 +19,7 @@ export default observer(
                     onDelete={user_store.updateGroups}
                     onChange={user_store.updateGroups}
                     group_store={group_store}
+                    user_store={this.props.user_store}
                   />
                 );
               }

@@ -64,6 +64,12 @@ export default class UserStore {
     );
   }
   
+  getUser(user_id) {
+    return axios.get(
+      usermanagement_url + 'users/' + user_id
+    )
+  }
+  
   initUserByResponse(response, resolve) {
     this.id = response.data._id;
     Cookies.set(this.COOKIE_NAME, response.data, {expires: 7});
@@ -103,7 +109,7 @@ export default class UserStore {
         {
           email: this.email,
           password: this.password,
-          fist_name: this.first_name,
+          first_name: this.first_name,
           last_name: this.last_name
         }
       ).then(

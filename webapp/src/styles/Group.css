@@ -5,6 +5,9 @@
     margin-top: 2rem;
 }
 
-.pointer {
-    cursor: pointer;
+.user-component {
+    border: 1px solid rgba(0,0,0,.1);
+    padding: 0.8rem;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
 }
