@@ -17,13 +17,18 @@ export default class GroupStore {
   }
   
   initGroup() {
+    this.users.clear();
     axios.get(
       usermanagement_url + 'groups/' + this.id,
     ).then(
       (response) => {
-        this.users.clear();
+      
         this.name = response.data.name;
-        response.data.users.forEach((user) => this.users.push(user));
+        response.data.users.forEach(
+          (user) => {
+            this.users.push(user)
+          }
+        );
       }
     ).catch(
       (error) => {
@@ -110,5 +115,14 @@ export default class GroupStore {
         }
       )
     });
+  }
+  
+  invite(invite_email) {
+    return axios.post(
+      usermanagement_url + 'groups/' + this.id + '/invite',
+      {
+        email: invite_email
+      }
+    );
   }
 }

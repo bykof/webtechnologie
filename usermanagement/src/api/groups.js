@@ -101,6 +101,39 @@ router.post(
   }
 );
 
+router.post(
+  '/:group_id/invite',
+  function (request, response) {
+    if (!request.body.email) return response.status(400).json({error: 'Keine Email angegeben!'});
+    
+    User.findOne({email: request.body.email}).then(
+      function (user) {
+        if (!user) return response.status(400).json({error: 'Email wurde nicht gefunden!'});
+        Group.findOne({_id: request.params.group_id}).then(
+          function (group) {
+            if (!group) return response.status(400).json({error: 'Gruppe wurde nicht gefunden!'});
+            group.users.push(user._id);
+            group.save().then(
+              function () {
+                user.groups.push(group._id);
+                user.save().then(
+                  function () {
+                    return response.sendStatus(200);
+                  }
+                );
+              }
+            );
+          }
+        );
+      }
+    ).catch(
+      function (error) {
+        return error_response(response, error);
+      }
+    )
+  }
+);
+
 router.delete(
   '/:group_id',
   function (request, response) {

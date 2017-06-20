@@ -81,37 +81,34 @@ router.post(
   function (request, response) {
     var body = request.body;
     
-    User.find({email: body.email}).then(
-      function (users) {
-        if (users.length > 0) {
-          response.status(400).json({error: 'user_already_exists'});
-        }
+    User.findOne({email: body.email}).then(
+      function (user) {
+        if (user) return response.status(400).json({error: 'user_already_exists'});
+        bcrypt.genSalt(config.SALT_ROUNDS, function (err, salt) {
+          bcrypt.hash(body.password, salt, function (err, hash) {
+            var user = new User(
+              {
+                first_name: body.first_name,
+                last_name: body.last_name,
+                email: body.email,
+                password: hash
+              }
+            );
+            user.save().then(
+              function (user) {
+                return response.status(201).json(user);
+              }
+            ).catch(function (error) {
+              return error_response(response, error);
+            });
+          });
+        });
       }
     ).catch(
       function (error) {
-        error_response(response, error);
+        return error_response(response, error);
       }
     );
-    
-    bcrypt.genSalt(config.SALT_ROUNDS, function (err, salt) {
-      bcrypt.hash(body.password, salt, function (err, hash) {
-        var user = new User(
-          {
-            first_name: body.first_name,
-            last_name: body.last_name,
-            email: body.email,
-            password: hash
-          }
-        );
-        user.save().then(
-          function (user) {
-            response.status(201).json(user);
-          }
-        ).catch(function (error) {
-          error_response(response, error);
-        });
-      });
-    });
   }
 );
 
