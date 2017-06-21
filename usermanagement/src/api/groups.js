@@ -112,9 +112,15 @@ router.post(
         Group.findOne({_id: request.params.group_id}).then(
           function (group) {
             if (!group) return response.status(400).json({error: 'Gruppe wurde nicht gefunden!'});
+            if (group.users.indexOf(user._id) !== -1) {
+              return response.status(400).json({error: 'User ist schon in dieser Gruppe!'});
+            }
             group.users.push(user._id);
             group.save().then(
               function () {
+                if (user.groups.indexOf(user._id) !== -1) {
+                  return response.status(400).json({error: 'User ist schon in dieser Gruppe!'});
+                }
                 user.groups.push(group._id);
                 user.save().then(
                   function () {
