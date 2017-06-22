@@ -77,10 +77,18 @@ router.route("/")
                                  })
                                }
                             });
+                        }).catch((error) => {
+                        console.log(error);
+                        res.json({
+                          "error": error
                         });
+                    });
                 })
                 .catch((error) => {
-                    console.error(error)
+                    console.error(error);
+                    res.json({
+                      "error": error
+                    });
                 })
         }
     })

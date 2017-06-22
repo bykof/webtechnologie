@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
+import cors from 'cors';
 import bodyParser from "body-parser";
 import invoiceRoutes from "./routes/invoices"
 import invoiceItemRoutes from "./routes/invoice_items";
@@ -10,6 +11,9 @@ mongoose.connect("mongodb://localhost/liabilities");
 
 // Setup Express
 let app = express();
+
+// Use CORS module to enable requests from different domains
+app.use(cors());
 
 // Setup BodyParser
 app.use(bodyParser.urlencoded( { extended: true } ));
