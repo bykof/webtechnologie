@@ -3,6 +3,7 @@ import React from 'react';
 import {observer} from 'mobx-react';
 import axios from 'axios';
 import {file_storage_url, liabilities_url} from "../config";
+import {INVOICE_EDITOR} from "../routes_constants";
 
 
 const IMAGE_TYPES = ['image/png', 'image/jpeg'];
@@ -73,7 +74,7 @@ export default observer(
       ).then(
         (response) => {
           // GOT THE INVOICE!
-          let invoice_id = response.data.invoice_id;
+          this.props.history.push(INVOICE_EDITOR(response.data.invoice_id));
         }
       ).catch(
         (error) => {

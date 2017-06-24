@@ -1,0 +1,11 @@
+.image-s {
+    width: 120px;
+    cursor: pointer;
+    height: auto;
+}
+
+.image-l {
+    width: 480px;
+    cursor: pointer;
+    height: auto;
+}

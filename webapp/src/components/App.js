@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {observer} from 'mobx-react';
 import {Route, BrowserRouter as Router} from "react-router-dom";
 
-import {ROOT, LOGIN, REGISTRATION, ABOUT, LOGOUT, GROUPS} from '../routes_constants';
+import {ROOT, LOGIN, REGISTRATION, ABOUT, LOGOUT, GROUPS, INVOICE_EDITOR} from '../routes_constants';
 
 import HomePage from './HomePage';
 import Login from "./Login";
@@ -12,6 +12,7 @@ import Navbar from "./Navbar";
 import About from "./About";
 import Logout from "./Logout";
 import Groups from "./groups/Groups";
+import InvoiceEditor from "./InvoiceEditor";
 
 export default observer(
   class App extends Component {
@@ -39,6 +40,10 @@ export default observer(
     
     render_groups(props) {
       return (<Groups {...props} user_store={this.user_store}/>);
+    }
+  
+    render_invoice_editor(props) {
+      return (<InvoiceEditor {...props} user_store={this.user_store}/>);
     }
     
     render() {
@@ -71,6 +76,10 @@ export default observer(
               <Route
                 path={GROUPS}
                 render={this.render_groups.bind(this)}
+              />
+              <Route
+                path={INVOICE_EDITOR()}
+                render={this.render_invoice_editor.bind(this)}
               />
             </div>
           </div>
