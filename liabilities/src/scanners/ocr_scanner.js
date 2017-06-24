@@ -18,7 +18,7 @@ class OCRScanner {
           easyimage.crop({
             src: file_path,
             dst: file_path,
-            cropwidth: info_obj.width,
+            cropwidth: info_obj.width / 2,
             x: info_obj.width / 2,
           }).then(
             (image) => {
@@ -51,7 +51,8 @@ class OCRScanner {
           tesseract.recognize(
             filename,
             {
-              lang: 'deu'
+              lang: 'deu',
+              classify_bln_numeric_mode: 1
             }
           )
             // .progress((p) => console.log(p))

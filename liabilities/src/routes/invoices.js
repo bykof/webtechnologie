@@ -63,6 +63,7 @@ router.route("/")
                             var new_invoice = Invoice({
                                 file_url: req.body["file_url"],
                                 user_id: req.body["user_id"],
+                                group_id: req.body['group_id'],
                                 total_price: result
                             });
 

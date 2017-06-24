@@ -1,202 +1,30 @@
 import React from 'react';
 
 import {observer} from 'mobx-react';
-import axios from 'axios';
-import {file_storage_url, liabilities_url} from "../config";
-import {INVOICE_EDITOR} from "../routes_constants";
-
-
-const IMAGE_TYPES = ['image/png', 'image/jpeg'];
+import InvoiceCreator from "./invoices/InvoiceCreator";
 
 
 export default observer(
   class HomePage extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        file: '',
-        invoice_amount: '',
-        error: '',
-        uploaded_file_id: null
-      };
-      
-      this.changeState = this.changeState.bind(this);
-      this.setFilePath = this.setFilePath.bind(this);
-      this.uploadFile = this.uploadFile.bind(this);
-      this.createInvoice = this.createInvoice.bind(this);
-      this.onSubmit = this.onSubmit.bind(this);
-      this.clear = this.clear.bind(this);
-    }
     
-    uploadFile() {
-      let file_upload = new FormData();
-      file_upload.append('image', this.state.file);
-      return new Promise(
-        (resolve, reject) => {
-          axios.post(
-            file_storage_url + 'files',
-            file_upload
-          ).then(
-            (response) => {
-              this.setState(
-                {
-                  uploaded_file_id: response.data._id
-                },
-                () => {
-                  resolve();
-                }
-              );
-            }
-          ).catch(
-            (error) => {
-              console.log(error);
-              console.log(error.response);
-              reject();
-            }
+    render() {
+      
+      const renderedInvoiceCreators = this.props.user_store.groups.map(
+        (group) => {
+          return (
+            <div className="col col-6" key={group.id}>
+              <InvoiceCreator
+                {...this.props}
+                group={group}
+              />
+            </div>
           );
         }
       );
-    }
-    
-    createInvoice() {
-      let file_url = '';
-      
-      if (this.state.uploaded_file_id) {
-        file_url = file_storage_url + 'files/' + this.state.uploaded_file_id + '/file';
-      }
-      
-      axios.post(
-        liabilities_url + 'invoices/',
-        {
-          file_url: file_url,
-          user_id: this.props.user_store.id,
-        }
-      ).then(
-        (response) => {
-          // GOT THE INVOICE!
-          this.props.history.push(INVOICE_EDITOR(response.data.invoice_id));
-        }
-      ).catch(
-        (error) => {
-          console.log(error);
-          console.log(error.response);
-        }
-      );
-    }
-    
-    onSubmit(event) {
-      event.preventDefault();
-      
-      if (this.state.file) {
-        this.uploadFile().then(
-          () => {
-            this.createInvoice().then(
-              (response) => {
-                console.log(response);
-              }
-            ).catch(
-              (error) => {
-                console.log(error);
-                console.log(error.response);
-                // TODO: SHOW ERROR!
-              }
-            );
-          }
-        ).catch(
-          (error) => {
-            console.log(error);
-            console.log(error.response);
-            // TODO: SHOW ERROR!
-          }
-        );
-      } else {
-        this.createInvoice();
-      }
-    }
-    
-    changeState(event) {
-      this.setState({[event.target.name]: event.target.value});
-    }
-    
-    setFilePath(event) {
-      let file = event.target.files[0];
-      if (IMAGE_TYPES.indexOf(file.type) >= 0) {
-        this.setState({[event.target.name]: file});
-      } else {
-        this.setState({error: 'Du hast keine Bilddatei angegeben!'});
-      }
-    }
-    
-    clear() {
-      this.setState({file: '', invoice_amount: ''});
-    }
-    
-    openFile() {
-      document.getElementById('file_upload').click();
-    }
-    
-    render() {
-      const renderedError = (
-        this.state.error ?
-          (
-            <div className="row">
-              <div className="col col-12">
-                <div className="message error" data-component="message">
-                  {this.state.error}
-                  <span className="close small" onClick={() => {
-                    this.setState({error: ''})
-                  }}/>
-                </div>
-              </div>
-            </div>
-          ) : null
-      );
       
       return (
-        <div className="row">
-          <div className="col col-6">
-            {renderedError}
-            <div className="row">
-              <div className="col col-12">
-                <form onSubmit={this.onSubmit}>
-                  <fieldset>
-                    <legend>Neue Rechnung</legend>
-                    <div className="form-item">
-                      <label>Rechnungsbetrag oder Foto</label>
-                      <div className="append">
-                        <input
-                          type="number"
-                          name="invoice_amount"
-                          disabled={
-                            !!this.state.file
-                          }
-                          value={this.state.invoice_amount}
-                          onChange={this.changeState}
-                        />
-                        <button className="button" type="button" onClick={this.openFile}>
-                          <i className="fa fa-camera" aria-hidden="true"/>
-                        </button>
-                        {
-                          this.state.file ?
-                            (
-                              <button className="button red" type="button" onClick={this.clear}>
-                                <i className="fa fa-remove" aria-hidden="true"/>
-                              </button>
-                            ) : null
-                        }
-                      </div>
-                      <input type="file" className="hide" name="file" id="file_upload" onChange={this.setFilePath}/>
-                    </div>
-                    <div className="form-item">
-                      <button type="submit">
-                        Senden
-                      </button>
-                    </div>
-                  </fieldset>
-                </form>
-              </div>
-            </div>
-          </div>
+        <div className="row gutters">
+          {renderedInvoiceCreators}
         </div>
       );
     }

@@ -21,8 +21,11 @@ export default {
       (file) => {
         redis_client.set(
           file.id,
-          req.files.image.data.toString('binary'),
+          req.files.image.data,
           (error, reply) => {
+            if (error) {
+              res.json(error);
+            }
             res.json(file);
           }
         );

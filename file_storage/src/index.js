@@ -12,20 +12,15 @@ import fileUpload from 'express-fileupload';
 let app = express();
 app.use(morgan('dev'));
 app.use(fileUpload());
-app.use(cors({
-  exposedHeaders: config.corsHeaders
-}));
-
-app.use(bodyParser.json({
-  limit: config.bodyLimit
-}));
+app.use(cors());
+app.use(bodyParser.json());
 
 initDB(
   () => {
     app.use(middleware({config}));
     app.resource('files', files);
     app.use(file_custom_routes);
-    let listener = app.listen(process.env.PORT || config.port, function(){
+    let listener = app.listen(process.env.PORT || config.port, function () {
       console.log('Listening on port ' + listener.address().port);
     });
   }

@@ -12,7 +12,7 @@ import Navbar from "./Navbar";
 import About from "./About";
 import Logout from "./Logout";
 import Groups from "./groups/Groups";
-import InvoiceEditor from "./InvoiceEditor";
+import InvoiceEditor from "./invoices/InvoiceEditor";
 
 export default observer(
   class App extends Component {

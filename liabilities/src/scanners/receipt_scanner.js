@@ -14,12 +14,8 @@ class ReceiptScanner {
         let words = l.split(" ");
         
         words.forEach((w) => {
-          if (
-            (w.includes(',') | w.includes('.')) &&
-            (w.toString().indexOf(',') !== -1 || w.toString().indexOf('.') !== -1) &&
-            !w.includes("%")
-          ) {
-            
+          if (w.match(/^\d+[\.,]\d\d$/g)) {
+            console.log('Found Price: ', w);
             let parsed = parseFloat(w.replace(',', '.'));
             if (parsed && parsed > max_price) {
               max_price = parsed;

@@ -13,6 +13,7 @@ export default class InvoiceStore {
         file_url: '',
         total_price: 0,
         date: null,
+        group_id: ''
       }
     );
     this.init();
@@ -30,7 +31,8 @@ export default class InvoiceStore {
       (response) => {
         this.file_url = response.data.file_url;
         this.total_price = response.data.total_price;
-        this.date = response.data.date
+        this.date = response.data.date;
+        this.group_id = response.data.group_id;
       }
     ).catch(
       (error) => {

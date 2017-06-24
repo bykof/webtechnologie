@@ -2,11 +2,11 @@ import React from 'react';
 
 import {observer} from 'mobx-react';
 import classNames from 'classnames';
-import InvoiceStore from "../stores/InvoiceStore";
+import InvoiceStore from "../../stores/InvoiceStore";
 import moment from 'moment';
 
 
-import '../styles/InvoiceEditor.css';
+import '../../styles/InvoiceEditor.css';
 
 
 export default observer(
