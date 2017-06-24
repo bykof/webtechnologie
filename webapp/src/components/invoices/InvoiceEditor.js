@@ -49,22 +49,9 @@ export default observer(
           ) : null
       );
       
-      return (
-        <div>
-          <div className="row">
-            <div className="col col-12">
-              {renderedError}
-            </div>
-          </div>
-          <div className="row">
-            <div className="col col-12">
-              <h3>
-                Rechnung vom {
-                moment(this.invoice_store.date).format('DD.MM.YYYY')} um {moment(this.invoice_store.date).format('HH:MM')} Uhr
-              </h3>
-            </div>
-          </div>
-          <div className="row">
+      const renderedImage = (
+        this.invoice_store.file_url ?
+          (
             <div className="col col-12">
               <img
                 className={
@@ -83,6 +70,32 @@ export default observer(
                 Bild {this.state.invoice_picture_collapsed ? 'vergrößern' : 'verkleinern'}
               </a>
             </div>
+          ) :
+          (
+            <div className="col col-12">
+              <p>Kein Bild hochgeladen!</p>
+            </div>
+          )
+      );
+      
+      return (
+        <div>
+          <div className="row">
+            <div className="col col-12">
+              {renderedError}
+            </div>
+          </div>
+          <div className="row">
+            <div className="col col-12">
+              <h3>
+                Rechnung vom {
+                moment(this.invoice_store.date).format('DD.MM.YYYY')}
+                um {moment(this.invoice_store.date).format('HH:MM')} Uhr
+              </h3>
+            </div>
+          </div>
+          <div className="row">
+            {renderedImage}
             <hr />
             <div className="col col-3">
               <form>
@@ -92,7 +105,9 @@ export default observer(
                     <input
                       type="number"
                       value={this.invoice_store.total_price}
-                      onChange={(event) => {this.invoice_store.total_price = event.target.value}}
+                      onChange={(event) => {
+                        this.invoice_store.total_price = event.target.value
+                      }}
                     />
                     <button type="button" disabled className="button">€</button>
                   </div>
@@ -104,14 +119,14 @@ export default observer(
           <div className="row">
             <div className="col col-12">
               <h4>Wer war dabei?</h4>
-    
+            
             </div>
           </div>
           <hr />
           <div className="row">
             <div className="col col-12">
               <h4>Wer hat gezahlt?</h4>
-              
+            
             </div>
           </div>
         </div>
