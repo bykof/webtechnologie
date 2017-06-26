@@ -72,32 +72,14 @@ export default observer(
           group_id: this.props.group.id,
           file_url: file_url,
           user_id: this.props.user_store.id,
+          total_price: this.state.invoice_amount,
         }
       ).then(
         (response) => {
           // GOT THE INVOICE!
+          console.log(response);
           let invoice_id = response.data.invoice_id;
-          if (file_url === '') {
-            axios.put(
-              liabilities_url + 'invoices/',
-              {
-                id: invoice_id,
-                total_price: this.state.invoice_amount,
-              }
-            ).then(
-              () => {
-                this.props.history.push(INVOICE_EDITOR(invoice_id));
-              }
-            ).catch(
-              (error) => {
-                console.log(error);
-                console.log(error.response);
-                // TODO: SHOW ERROR!!!
-              }
-            )
-          } else {
-            this.props.history.push(INVOICE_EDITOR(invoice_id));
-          }
+          this.props.history.push(INVOICE_EDITOR(invoice_id));
         }
       ).catch(
         (error) => {

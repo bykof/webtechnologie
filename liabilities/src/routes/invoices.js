@@ -41,57 +41,67 @@ router.route("/")
    * user_id: The user who is creating the Invoice.
    */
   .post((req, res) => {
-    if (!req.body["file_url"] && req.body.file_url !== '') {
-      res.status(400).json({
-        "file_url": "Missing"
-      });
+    // If user id is not given return an error response
+    if (!req.body.user_id) {
+      return res.status(400).json(
+        {
+          "user_id": "Missing"
+        }
+      );
     }
-    else if (!req.body["user_id"]) {
-      res.status(400).json({
-        "user_id": "Missing"
-      });
+    
+    let ocr_scanner = new ocrScanner();
+    let receipt_scanner = new receiptScanner();
+    
+    // Create an new invoice
+    let new_invoice = Invoice({
+      file_url: req.body.file_url,
+      user_id: req.body.user_id,
+      group_id: req.body.group_id,
+      total_price: req.body.total_price
+    });
+    
+    // Create a function to save the invoice and return the response
+    function save_invoice() {
+      new_invoice.save(
+        (err) => {
+          if (err) return res.json({"error": err});
+          
+          return res.json({invoice_id: new_invoice._id});
+        }
+      );
     }
-    else {
-      let ocr_scanner = new ocrScanner();
-      let receipt_scanner = new receiptScanner();
-      
-      ocr_scanner.scanRemote(req.body["file_url"])
-        .then((result) => {
-          receipt_scanner.extractTotalPrice(result)
-            .then((result) => {
-              // Attempt to save the new model.
-              var new_invoice = Invoice({
-                file_url: req.body["file_url"],
-                user_id: req.body["user_id"],
-                group_id: req.body['group_id'],
-                total_price: result
+    
+    if (req.body.file_url) {
+      ocr_scanner.scanRemote(req.body.file_url).then(
+        (result) => {
+          receipt_scanner.extractTotalPrice(result).then(
+            (result) => {
+              // Set the price of the model and save
+              new_invoice.total_price = result;
+              return save_invoice();
+            }
+          ).catch(
+            (error) => {
+              console.log(error);
+              return res.json({
+                "error": error
               });
-              
-              new_invoice.save((err) => {
-                if (err) {
-                  res.json({
-                    "error": err
-                  });
-                } else {
-                  res.json({
-                    invoice_id: new_invoice._id
-                  })
-                }
-              });
-            }).catch((error) => {
-            console.log(error);
-            res.json({
-              "error": error
-            });
-          });
-        })
-        .catch((error) => {
+            }
+          );
+        }
+      ).catch(
+        (error) => {
           console.error(error);
-          res.json({
+          return  res.json({
             "error": error
           });
-        })
+        }
+      );
+    } else {
+      return save_invoice();
     }
+    
   })
   
   .put((req, res) => {
@@ -118,6 +128,6 @@ router.route("/")
         }
       })
     }
-  })
+  });
 
 export default router;
