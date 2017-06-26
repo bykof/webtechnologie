@@ -10,12 +10,12 @@ export default observer(
     render() {
       
       const renderedInvoiceCreators = this.props.user_store.groups.map(
-        (group) => {
+        (group_store) => {
           return (
-            <div className="col col-6" key={group.id}>
+            <div className="col col-6" key={group_store.id}>
               <InvoiceCreator
                 {...this.props}
-                group={group}
+                group_store={group_store}
               />
             </div>
           );

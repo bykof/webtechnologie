@@ -67,7 +67,7 @@ router.route("/")
         (err) => {
           if (err) return res.json({"error": err});
           
-          return res.json({invoice_id: new_invoice._id});
+          return res.json({invoice: new_invoice});
         }
       );
     }

@@ -59,6 +59,37 @@ export default observer(
       );
     }
     
+    createInvoiceItems(invoice) {
+      let created_invoice_items = [];
+      
+      this.props.group_store.users.forEach(
+        (user_id) => {
+          axios.post(
+            liabilities_url + 'invoice_items/',
+            {
+              invoice_id: invoice._id,
+              user_id: user_id,
+              role: 'debtor',
+              advanced_price: Math.round((invoice.total_price / this.props.group_store.users) * 100) / 100,
+            }
+          ).then(
+            (response) => {
+              created_invoice_items.push(response.data);
+              
+              if (created_invoice_items.length === this.props.group_store.users.length) {
+                this.props.history.push(INVOICE_EDITOR(invoice._id));
+              }
+            }
+          ).catch(
+            (error) => {
+              console.log(error);
+              console.log(error.response);
+            }
+          );
+        }
+      );
+    }
+    
     createInvoice() {
       let file_url = '';
       
@@ -69,7 +100,7 @@ export default observer(
       axios.post(
         liabilities_url + 'invoices/',
         {
-          group_id: this.props.group.id,
+          group_id: this.props.group_store.id,
           file_url: file_url,
           user_id: this.props.user_store.id,
           total_price: this.state.invoice_amount,
@@ -78,8 +109,7 @@ export default observer(
         (response) => {
           // GOT THE INVOICE!
           console.log(response);
-          let invoice_id = response.data.invoice_id;
-          this.props.history.push(INVOICE_EDITOR(invoice_id));
+          this.createInvoiceItems(response.data.invoice)
         }
       ).catch(
         (error) => {
@@ -152,7 +182,7 @@ export default observer(
       return (
         <div className="row">
           <div className="col col-12 text-center">
-            <h4>{this.props.group.name}</h4>
+            <h4>{this.props.group_store.name}</h4>
           </div>
           <div className="col col-12">
             {renderedError}

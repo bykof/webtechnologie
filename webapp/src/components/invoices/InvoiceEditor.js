@@ -88,9 +88,7 @@ export default observer(
           <div className="row">
             <div className="col col-12">
               <h3>
-                Rechnung vom {
-                moment(this.invoice_store.date).format('DD.MM.YYYY')}
-                um {moment(this.invoice_store.date).format('HH:MM')} Uhr
+                Rechnung vom {moment(this.invoice_store.date).format('DD.MM.YYYY')} um {moment(this.invoice_store.date).format('HH:MM')} Uhr
               </h3>
             </div>
           </div>
