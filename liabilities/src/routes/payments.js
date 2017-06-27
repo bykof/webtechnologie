@@ -1,12 +1,15 @@
 import express from "express";
 import Invoice from "../models/invoice";
 import Payment from "../models/payment";
-
+import BalanceObserver from "../balance_observer";
 
 let router = express.Router();
 
 router.route("/")
     .post((req, res) => {
+        let balObs = new BalanceObserver();
+        balObs.GetUnpaidDebtsForUser(1);
+
         if (!req.body["invoice_id"]) {
             res.json({
                 "invoice_id": "Missing."
@@ -47,14 +50,14 @@ router.route("/")
                 });
 
                 new_payment.save((err) => {
-                   if (err) {
-                       res.json({ "error": err })
-                   } else {
-                       res.json({ "payment_id": new_payment })
-                   }
+                    if (err) {
+                        res.json({"error": err})
+                    } else {
+                        res.json({"payment_id": new_payment})
+                    }
                 });
             }
-        })
-    });
+        });
+    })
 
-module.exports = router;
+export default router;
