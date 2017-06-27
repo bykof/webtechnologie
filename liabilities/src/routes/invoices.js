@@ -1,23 +1,35 @@
 import express from "express";
-import ocrScanner from "../scanners/ocr_scanner";
-import receiptScanner from "../scanners/receipt_scanner";
+import OCRScanner from "../scanners/ocr_scanner";
+import ReceiptScanner from "../scanners/receipt_scanner";
 import Invoice from "../models/invoice";
+import BalanceObserver from "../balance_observer";
 
 
 let router = express.Router();
 
 router.route("/")
-    /*
-    * Will return full receipt info. Requires:
-    * invoice_id.
-    */
+/*
+ * Will return full receipt info. Requires:
+ * invoice_id.
+ */
     .get((req, res) => {
         /* Dev options */
         if (req.query.dev == "all") {
-            Invoice.find({},
-                (err, doc) => {
-                    if (doc) res.json(doc);
-                });
+            Invoice.find({}, (err, doc) => {
+                if (doc) res.json(doc);
+                else {
+                    res.json ({
+                        "Result": "No invoices found"
+                    });
+                }
+            });
+        }
+        else if (req.query.billing != null) {
+            let balanceObserver = new BalanceObserver();
+            balanceObserver.GetUnpaidDebtsForUser(2)
+                .then((result) => {
+                    res.json(result);
+                })
         }
         else if (!req.query.id) {
             res.json({
@@ -35,11 +47,11 @@ router.route("/")
     })
 
     /*
-    * Will be called from front-end service.
-    * Will create a liability based on a bill. Requires:
-    * file_url: The url of the uploaded receipt.
-    * user_id: The user who is creating the Invoice.
-    */
+     * Will be called from front-end service.
+     * Will create a liability based on a bill. Requires:
+     * file_url: The url of the uploaded receipt.
+     * user_id: The user who is creating the Invoice.
+     */
     .post((req, res) => {
         if (!req.body["file_url"]) {
             res.json({
@@ -52,8 +64,8 @@ router.route("/")
             });
         }
         else {
-            let ocr_scanner = new ocrScanner();
-            let receipt_scanner = new receiptScanner();
+            let ocr_scanner = new OCRScanner();
+            let receipt_scanner = new ReceiptScanner();
 
             ocr_scanner.scanRemote(req.body["file_url"])
                 .then((result) => {
@@ -67,15 +79,15 @@ router.route("/")
                             });
 
                             new_invoice.save((err) => {
-                               if (err) {
-                                   res.json({
-                                       "error": err
-                                   });
-                               } else {
-                                 res.json({
-                                     invoice_id: new_invoice._id
-                                 })
-                               }
+                                if (err) {
+                                    res.json({
+                                        "error": err
+                                    });
+                                } else {
+                                    res.json({
+                                        invoice_id: new_invoice._id
+                                    })
+                                }
                             });
                         });
                 })
