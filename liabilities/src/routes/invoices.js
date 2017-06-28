@@ -30,6 +30,9 @@ router.route("/")
                 .then((result) => {
                     res.json(result);
                 })
+                .catch((error) => {
+                    res.json(error);
+                })
         }
         else if (!req.query.id) {
             res.json({
