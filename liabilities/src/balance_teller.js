@@ -10,8 +10,10 @@ class BalanceObserver {
     /*
      * Will go through all invoices and return each invoice_id
      * with the open debts to the respective creditors.
+     * The key of the response is the receiving user and the value the money that user is getting.
+     * If the number is negative, then the passed user_id owes that much to him.
      */
-    GetUnpaidDebtsForUser(user_id) {
+    GetBalancesOfUser(user_id) {
         return new Promise((resolve, reject) => {
             Invoice.find({}, (err, doc) => {
                 if (err) return err;
@@ -23,12 +25,16 @@ class BalanceObserver {
                         invoice.invoice_items.forEach((item) => {
                             // Calculate debts to every creditor.
                             if (item.user_id != user_id && item.role == "creditor") {
-                                let debt_per_user = item.advanced_price / (invoice.invoice_items.length - 1)
+                                // -1 to exclude self
+                                let participants_count = invoice.invoice_items.length - 1
+                                let debt_per_user = item.advanced_price / participants_count
 
                                 // If this user is a creditor of that invoice, the difference needs to be considered.
                                 invoice.invoice_items.forEach((item_2) => {
+                                    // Check if this user as a creditor owes to a bigger creditor.
+
                                     if (item_2.user_id == user_id && item_2.role == "creditor") {
-                                        debt_per_user = (item_2.advanced_price - debt_per_user)
+                                        debt_per_user = (debt_per_user - (item_2.advanced_price/participants_count)).toFixed(2)
                                     }
                                 });
 

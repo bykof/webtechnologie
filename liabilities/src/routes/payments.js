@@ -1,14 +1,14 @@
 import express from "express";
 import Invoice from "../models/invoice";
 import Payment from "../models/payment";
-import BalanceObserver from "../balance_observer";
+import BalanceObserver from "../balance_teller";
 
 let router = express.Router();
 
 router.route("/")
     .post((req, res) => {
         let balObs = new BalanceObserver();
-        balObs.GetUnpaidDebtsForUser(1);
+        balObs.GetBalancesOfUser(1);
 
         if (!req.body["invoice_id"]) {
             res.json({
