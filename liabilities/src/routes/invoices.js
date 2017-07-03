@@ -2,7 +2,7 @@ import express from "express";
 import OCRScanner from "../scanners/ocr_scanner";
 import ReceiptScanner from "../scanners/receipt_scanner";
 import Invoice from "../models/invoice";
-import BalanceObserver from "../balance_observer";
+import BalanceObserver from "../balance_teller";
 
 
 let router = express.Router();
@@ -26,9 +26,12 @@ router.route("/")
         }
         else if (req.query.billing != null) {
             let balanceObserver = new BalanceObserver();
-            balanceObserver.GetUnpaidDebtsForUser(2)
+            balanceObserver.GetBalancesOfUser(1)
                 .then((result) => {
                     res.json(result);
+                })
+                .catch((error) => {
+                    res.json(error);
                 })
         }
         else if (!req.query.id) {
