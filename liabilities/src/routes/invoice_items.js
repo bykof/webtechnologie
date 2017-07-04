@@ -17,7 +17,7 @@ router.route("/")
  */
   .post((req, res) => {
     
-    ['invoice_id', 'user_id', 'role', 'advanced_price'].forEach(
+    ['invoice_id', 'user_id', 'role'].forEach(
       (key) => {
         if (!(key in req.body) && !req.body[key]) return res.status(400).json({[key]: 'missing'});
       }
@@ -39,36 +39,16 @@ router.route("/")
         });
         
         if (new_invoice_item.role === "creditor") {
+          if (!req.body.advanced_price) {
+            req.body.advanced_price = 0;
+          }
           new_invoice_item.advanced_price = req.body.advanced_price;
         }
         
         new_invoice_item.save(
           (err) => {
             if (err) return res.status(400).json({"error": err});
-            
-            // Search invoice and add invoice item.
-            Invoice.findOne(
-              {
-                _id: new_invoice_item.invoice_id
-              },
-              (error, invoice_found) => {
-                if (err) return res.status(400).json(error);
-                
-                if (invoice_found) {
-                  invoice_found.invoice_items.push(new_invoice_item);
-                  
-                  invoice_found.save(
-                    (err) => {
-                      if (err) return res.status(400).json({"error": err});
-                      
-                      return res.json({
-                        invoice_item_id: new_invoice_item._id
-                      })
-                    }
-                  );
-                }
-              }
-            );
+            return res.json({invoice_item: new_invoice_item});
           }
         );
       }
@@ -101,6 +81,10 @@ router.route("/")
             if (item_found) {
               item_found.role = req.body["role"];
               
+              if (item_found.role === 'creditor') {
+                item_found.advanced_price = req.body['advanded_price'];
+              }
+              
               item_found.save((err) => {
                 if (err) return res.json({"error": err});
                 else {
@@ -113,41 +97,43 @@ router.route("/")
           });
       }
     })
-  })
+  });
+
   
-  /*
-   * Will delete an invoice item if it exists.
-   */
+/*
+ * Will delete an invoice item if it exists.
+ */
+router.route('/:invoice_item_id')
   .delete((req, res) => {
-    if (!req.body["invoice_item_id"]) {
+    if (!req.params["invoice_item_id"]) {
       return res.json({
         "invoice_item_id": "Missing."
       });
     }
     
-    InvoiceItem.count({_id: req.body["invoice_item_id"]}, (err, count) => {
+    InvoiceItem.count({_id: req.params["invoice_item_id"]}, (err, count) => {
       if (count <= 0) {
-        return res.json({
-          "id": "Invoice item with this ID not found."
-        });
+        return res.json({"id": "Invoice item with this ID not found."});
       }
       else {
         InvoiceItem.findOne({
-            _id: req.body["invoice_item_id"]
+            _id: req.params["invoice_item_id"]
           },
           (err, item_found) => {
             if (item_found) {
-              item_found.delete((err) => {
+              item_found.remove((err) => {
                 if (err) return res.json({"error": err});
                 else {
                   return res.json({
-                    invoice_item_id: "Deleted"
+                    success: "Deleted"
                   })
                 }
               });
             }
           });
       }
-    })
+    });
   });
+
+
 export default router;

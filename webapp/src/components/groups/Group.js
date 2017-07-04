@@ -3,6 +3,7 @@ import {observer} from 'mobx-react';
 import classNames from 'classnames';
 
 import '../../styles/Group.css';
+import UserStore from "../../stores/UserStore";
 
 
 export default observer(
@@ -55,7 +56,7 @@ export default observer(
     retrieveUsers() {
       this.props.group_store.users.forEach(
         (user_id) => {
-          this.props.user_store.getUser(user_id).then(
+          UserStore.getUser(user_id).then(
             (response) => {
               this.setState({retrieved_users: this.state.retrieved_users.concat(response.data)});
             }

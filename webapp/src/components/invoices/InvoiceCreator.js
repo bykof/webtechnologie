@@ -64,13 +64,18 @@ export default observer(
       
       this.props.group_store.users.forEach(
         (user_id) => {
+          let role = 'debtor';
+          
+          // Set role to creditor who is creating the invoice
+          if (user_id === this.props.user_store.id) role = 'creditor';
+          
           axios.post(
             liabilities_url + 'invoice_items/',
             {
               invoice_id: invoice._id,
               user_id: user_id,
-              role: 'debtor',
-              advanced_price: Math.round((invoice.total_price / this.props.group_store.users) * 100) / 100,
+              role: role,
+              advanced_price: invoice.total_price,
             }
           ).then(
             (response) => {
@@ -109,7 +114,7 @@ export default observer(
         (response) => {
           // GOT THE INVOICE!
           console.log(response);
-          this.createInvoiceItems(response.data.invoice)
+          this.createInvoiceItems(response.data)
         }
       ).catch(
         (error) => {

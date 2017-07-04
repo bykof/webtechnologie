@@ -32,7 +32,7 @@ export default class GroupStore {
       }
     ).catch(
       (error) => {
-        console.log(error.response);
+        console.error(error, error.response);
       }
     )
   }
@@ -56,7 +56,7 @@ export default class GroupStore {
           }
         ).catch(
           (error) => {
-            console.log(error.response);
+            console.error(error, error.response);
             reject(error);
           }
         )

@@ -7,6 +7,8 @@ import moment from 'moment';
 
 
 import '../../styles/InvoiceEditor.css';
+import GroupStore from "../../stores/GroupStore";
+import InvoiceItem from "./InvoiceItem";
 
 
 export default observer(
@@ -17,6 +19,8 @@ export default observer(
         error: '',
         invoice_picture_collapsed: true
       };
+      
+      this.group_store = null;
       this.changeState = this.changeState.bind(this);
     }
     
@@ -33,6 +37,11 @@ export default observer(
     }
     
     render() {
+      
+      if (this.invoice_store.group_id && !this.group_store) {
+        this.group_store = new GroupStore(this.invoice_store.group_id);
+      }
+      
       const renderedError = (
         this.state.error ?
           (
@@ -88,7 +97,8 @@ export default observer(
           <div className="row">
             <div className="col col-12">
               <h3>
-                Rechnung vom {moment(this.invoice_store.date).format('DD.MM.YYYY')} um {moment(this.invoice_store.date).format('HH:MM')} Uhr
+                Rechnung vom {moment(this.invoice_store.date).format('DD.MM.YYYY')}
+                um {moment(this.invoice_store.date).format('HH:MM')} Uhr
               </h3>
             </div>
           </div>
@@ -117,14 +127,48 @@ export default observer(
           <div className="row">
             <div className="col col-12">
               <h4>Wer war dabei?</h4>
-            
+              {
+                this.group_store ? (
+                  this.group_store.users.map(
+                    (user) => {
+                      return (
+                        <InvoiceItem
+                          type={'debitor'}
+                          key={user}
+                          user_id={user}
+                          invoice_store={this.invoice_store}
+                        />
+                      );
+                    }
+                  )
+                ) : (
+                  'lädt...'
+                )
+              }
             </div>
           </div>
           <hr />
           <div className="row">
             <div className="col col-12">
               <h4>Wer hat gezahlt?</h4>
-            
+              {
+                this.group_store ? (
+                  this.group_store.users.map(
+                    (user) => {
+                      return (
+                        <InvoiceItem
+                          type={'creditor'}
+                          key={user}
+                          user_id={user}
+                          invoice_store={this.invoice_store}
+                        />
+                      );
+                    }
+                  )
+                ) : (
+                  'lädt...'
+                )
+              }
             </div>
           </div>
         </div>

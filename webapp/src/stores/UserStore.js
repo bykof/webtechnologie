@@ -64,7 +64,7 @@ export default class UserStore {
     );
   }
   
-  getUser(user_id) {
+  static getUser(user_id) {
     return axios.get(
       usermanagement_url + 'users/' + user_id
     )
