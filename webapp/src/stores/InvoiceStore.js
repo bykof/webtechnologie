@@ -54,8 +54,35 @@ export default class InvoiceStore {
     );
   }
   
+  get_creditor() {
+    return this.invoice_items.filter(
+      (invoice_item) => {
+        return invoice_item.role === 'creditor';
+      }
+    );
+  }
+  
+  get_debitor() {
+    return this.invoice_items.filter(
+      (invoice_item) => {
+        return invoice_item.role === 'creditor';
+      }
+    );
+  }
+  
+  static getInvoicesOfGroup(group_id) {
+    return axios.get(
+      liabilities_url + 'invoices/',
+      {
+        params: {
+          group_id: group_id
+        }
+      }
+    );
+  }
+  
   // Creates a new invoice item
-  createInvoiceItem(invoice_id, user_id, role, advanced_price=0) {
+  static createInvoiceItem(invoice_id, user_id, role, advanced_price=0) {
     return axios.post(
       liabilities_url + 'invoice_items/',
       {
@@ -67,7 +94,7 @@ export default class InvoiceStore {
     );
   }
   
-  changeInvoiceItem(invoice_item_id, role, advanced_price=0) {
+  static changeInvoiceItem(invoice_item_id, role, advanced_price=0) {
     return axios.put(
       liabilities_url + 'invoice_items/',
       {
@@ -78,7 +105,7 @@ export default class InvoiceStore {
     );
   }
   
-  deleteInvoiceItem(invoice_item_id) {
+  static deleteInvoiceItem(invoice_item_id) {
     return axios.delete(
       liabilities_url + 'invoice_items/' + invoice_item_id
     )

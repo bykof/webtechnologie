@@ -186,9 +186,6 @@ export default observer(
       
       return (
         <div className="row">
-          <div className="col col-12 text-center">
-            <h4>{this.props.group_store.name}</h4>
-          </div>
           <div className="col col-12">
             {renderedError}
             <div className="row">
