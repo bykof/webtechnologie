@@ -155,7 +155,9 @@ export default observer(
                     <input
                       type="number"
                       value={
-                        this.getInvoiceItemWithUser(this.props.user_id).advanced_price
+                        this.getInvoiceItemWithUser(this.props.user_id).advanced_price ?
+                          this.getInvoiceItemWithUser(this.props.user_id).advanced_price :
+                          0
                       }
                       onChange={this.onChangeAdvancedPriceNumber}
                     />

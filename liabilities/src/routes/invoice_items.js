@@ -82,7 +82,9 @@ router.route("/")
               item_found.role = req.body["role"];
               
               if (item_found.role === 'creditor') {
-                item_found.advanced_price = req.body['advanded_price'];
+                item_found.advanced_price = req.body['advanced_price'];
+              } else {
+                delete item_found.advanced_price;
               }
               
               item_found.save((err) => {

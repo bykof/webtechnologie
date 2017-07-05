@@ -2,14 +2,13 @@ import React, {Component} from 'react';
 import {observer} from 'mobx-react';
 import {Route, BrowserRouter as Router} from "react-router-dom";
 
-import {ROOT, LOGIN, REGISTRATION, ABOUT, LOGOUT, GROUPS, INVOICE_EDITOR} from '../routes_constants';
+import {ROOT, LOGIN, REGISTRATION, LOGOUT, GROUPS, INVOICE_EDITOR} from '../routes_constants';
 
 import HomePage from './HomePage';
 import Login from "./Login";
 import Registration from "./Registration";
 import UserStore from "../stores/UserStore";
 import Navbar from "./Navbar";
-import About from "./About";
 import Logout from "./Logout";
 import Groups from "./groups/Groups";
 import InvoiceEditor from "./invoices/InvoiceEditor";
@@ -51,12 +50,12 @@ export default observer(
         <Router>
           <div>
             <Navbar user_store={this.user_store}/>
+            <Route
+              exact={true}
+              path={ROOT}
+              render={this.render_homepage.bind(this)}
+            />
             <div className="content">
-              <Route
-                exact={true}
-                path={ROOT}
-                render={this.render_homepage.bind(this)}
-              />
               <Route
                 path={LOGIN}
                 render={this.render_login.bind(this)}
@@ -64,10 +63,6 @@ export default observer(
               <Route
                 path={REGISTRATION}
                 render={this.render_registration.bind(this)}
-              />
-              <Route
-                path={ABOUT}
-                component={About}
               />
               <Route
                 path={LOGOUT}

@@ -81,6 +81,17 @@ export default class InvoiceStore {
     );
   }
   
+  static getCreditsAndDebtsOfUser(user_id) {
+    return axios.get(
+      liabilities_url + 'invoices/',
+      {
+        params: {
+          billing: user_id
+        }
+      }
+    );
+  }
+  
   // Creates a new invoice item
   static createInvoiceItem(invoice_id, user_id, role, advanced_price=0) {
     return axios.post(

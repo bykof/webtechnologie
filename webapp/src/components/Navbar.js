@@ -4,7 +4,7 @@ import {NavLink} from 'react-router-dom';
 import {observer} from 'mobx-react';
 
 import '../styles/Navbar.css';
-import {LOGIN, ABOUT, LOGOUT, GROUPS} from "../routes_constants";
+import {LOGIN, LOGOUT, GROUPS} from "../routes_constants";
 import IsLoggedIn from "./IsLoggedIn";
 import IsNotLoggedIn from "./IsNotLoggedIn";
 
@@ -63,12 +63,6 @@ export default observer(
                     </NavLink>
                   </li>
                 </IsLoggedIn>
-                
-                <li>
-                  <NavLink to={ABOUT}>
-                    About
-                  </NavLink>
-                </li>
                 <IsLoggedIn user_store={this.props.user_store}>
                   <li>
                     <NavLink to={LOGOUT}>

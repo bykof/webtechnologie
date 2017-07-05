@@ -1,5 +1,31 @@
 .invoice-view {
-    border: 1px solid rgba(0,0,0,.2);
+    border: 1px solid rgba(0, 0, 0, .2);
     margin: 1em 0;
     padding: 2em;
+}
+
+.creditors-debtors {
+    border: 1px solid rgba(0, 0, 0, .2);
+    margin-bottom: 3em;
+    padding: 2em;
+}
+
+.jumbotron {
+    background-color: rgba(255, 255, 255, .3);
+    padding: 2em;
+    margin-top: 4em;
+    height: 300px;
+    width:100%;
+}
+
+.background-image {
+    position: fixed;
+    background-image: url('../static/homepage.jpeg');
+    height: 100%;
+    width: 100%;
+    margin-top: -25px;
+    -webkit-background-size: cover; /* For WebKit*/
+    -moz-background-size: cover; /* Mozilla*/
+    -o-background-size: cover; /* Opera*/
+    background-size: cover; /* Generic*/
 }

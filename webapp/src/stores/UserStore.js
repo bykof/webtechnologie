@@ -74,6 +74,7 @@ export default class UserStore {
     this.id = response.data._id;
     Cookies.set(this.COOKIE_NAME, response.data, {expires: 7});
     this.is_logged_in = true;
+    this.initUser();
     resolve(response);
   }
   
