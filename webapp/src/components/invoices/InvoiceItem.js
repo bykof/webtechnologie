@@ -125,16 +125,15 @@ export default observer(
     
     onChangeAdvancedPriceNumber(event) {
       let value = event.target.value;
-      console.log(value);
+      let invoice_item = this.getInvoiceItemWithUser(this.props.user_id);
+      invoice_item.role = 'creditor';
+      invoice_item.advanced_price = value;
+      
       if (this.debounceAdvancedPrice) {
         clearTimeout(this.debounceAdvancedPrice);
       }
       this.debounceAdvancedPrice = setTimeout(
         () => {
-          console.log('save');
-          let invoice_item = this.getInvoiceItemWithUser(this.props.user_id);
-          invoice_item.role = 'creditor';
-          invoice_item.advanced_price = value;
           this.changeInvoiceItem(invoice_item);
           this.debounceAdvancedPrice = null;
         },
