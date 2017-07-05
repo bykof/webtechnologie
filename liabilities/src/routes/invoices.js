@@ -25,15 +25,29 @@ router.route("/")
         }
       });
     }
-    else if (req.query.billing != null) {
+    else if (req.query.billing) {
       let balanceObserver = new BalanceObserver();
-      balanceObserver.GetBalancesOfUser(1)
-        .then((result) => {
-          res.json(result);
-        })
-        .catch((error) => {
-          res.json(error);
-        })
+      balanceObserver.GetBalancesOfUser(
+        req.query.billing
+      ).then(
+        (result) => {
+          return res.json(result);
+        }
+      ).catch(
+        (error) => {
+          return res.json(error);
+        }
+      )
+    }
+    else if (req.query.group_id) {
+      Invoice.find(
+        {group_id: req.query.group_id},
+        (error, invoices) => {
+          if(error) return res.status(400).json({error: error});
+          return res.json(invoices);
+        }
+      );
+      
     }
     else if (!req.query.id) {
       res.json({
@@ -135,16 +149,16 @@ router.route("/")
     }
   });
 
-  
-  router.route('/:invoice_id/invoice_items').get(
-    (request, response) => {
-      InvoiceItem.find(
-        {invoice_id: request.params.invoice_id},
-        (error, invoice_items) => {
-          if (error) return response.json({error: error});
-          return response.json(invoice_items)
-        }
-      );
-    }
-  );
+
+router.route('/:invoice_id/invoice_items').get(
+  (request, response) => {
+    InvoiceItem.find(
+      {invoice_id: request.params.invoice_id},
+      (error, invoice_items) => {
+        if (error) return response.json({error: error});
+        return response.json(invoice_items)
+      }
+    );
+  }
+);
 export default router;
