@@ -122,7 +122,7 @@ class BalanceObserver {
           if (creditors[creditor_key] === 0) return;
           
           // Give the creditors their money back
-          // Check if the charge is bigger than the creditor have
+          // Check if the charge is bigger than the creditor has
           // so he can give him all his money
           // otherwise you have to subtract the creditors charge from the money a debitor has
           // and do the next round
