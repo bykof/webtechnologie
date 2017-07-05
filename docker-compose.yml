@@ -8,7 +8,7 @@ services:
     image: mongo
     ports:
       - "27018:27017"
-  liability_mongo_db:
+  liabilities_mongo_db:
     image: mongo
     ports:
       - "27019:27017"
@@ -34,10 +34,25 @@ services:
       - REDIS_URL=file_storage_redis
       - REDIS_PORT=6379
       - PORT=8000
+  liabilities:
+      build: liabilities
+      ports:
+        - "8001:8001"
+      volumes:
+        - "./liabilities:/liabilities"
+      links:
+        - liabilities_mongo_db
+        - file_storage
+      depends_on:
+        - liabilities_mongo_db
+      environment:
+        - MONGODB_URL=liabilities_mongo_db
+        - MONGODB_PORT=27019
+        - PORT=8001
   usermanagement:
     build: usermanagement
     ports:
-      - "8001:8001"
+      - "8002:8002"
     volumes:
       - "./usermanagement:/usermanagement"
     links:
@@ -45,9 +60,9 @@ services:
     depends_on:
       - usermanagement_mongo_db
     environment:
-      - MONGODB_URL=usermanagement_mongo_db
+      - MONGODB_URL=liability_mongo_db
       - MONGODB_PORT=27018
-      - PORT=8001
+      - PORT=8002
   webapp:
     build: webapp
     ports:
@@ -56,3 +71,5 @@ services:
       - "./webapp:/webapp"
     links:
       - file_storage
+      - usermanagement
+      - liabilities
