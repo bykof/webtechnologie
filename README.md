@@ -6,7 +6,11 @@ _Spliddit ermöglicht es dir, Kosten in einer Gruppe gleich oder verschieden auf
 [Kanban Board](https://waffle.io/bykof/webtechnologie)
 
 ## Installation
-TBD
+
+Führe `install.sh` aus und anschließend `start.sh`.
+
+Fertig :)
+
 
 ## Über das Projekt
 
